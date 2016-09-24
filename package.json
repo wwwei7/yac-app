@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vincentweiwei/react.git"
+    "url": "git+https://code.aliyun.com/sys/yac-application.git"
   },
   "author": "vincent",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vincentweiwei/react/issues"
   },
-  "homepage": "https://github.com/vincentweiwei/react#readme",
+  "homepage": "https://code.aliyun.com/sys/yac-application#readme",
   "dependencies": {
     "antd": "^1.11.1",
     "react": "^15.3.1",
