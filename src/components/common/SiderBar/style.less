@@ -1,0 +1,25 @@
+@siderBgColor: #f7f7f7;
+
+#yac-sider{
+    margin: 0 20px;
+    background: @siderBgColor;
+    float: left;
+    border-color: @siderBgColor;
+    a{
+        display: inline-block;
+    }
+     .ant-menu-item, .ant-menu-submenu-title{
+        font-size: 13px;
+        height: 55px;
+        line-height: 55px;
+        border-color: @siderBgColor;         
+     }
+     .ant-menu-sub{
+         background: transparent;
+     }
+     .ant-menu-item-selected{
+        border-right: 2px solid #2db7f5;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}

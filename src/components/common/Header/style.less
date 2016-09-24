@@ -1,21 +1,33 @@
 @containerW: 1024px;
 
 .header{
-    font-size: 18px;
-    line-height: 45px;
+    font-size: 13px;
+    line-height: 50px;
+    color: #fff;
+    margin-bottom: 20px;
+    background-color: #4285f4;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
     .container{
         width: @containerW;
         margin: 0 auto;
     }
     .header-logo{
-        font-size: 30px;
+        font-size: 23px;
         float: left;
+        color: #fff;
     }
 }
 
 .header-user{
     float: right;
     span{
-        margin-right: 30px;
+        margin-left: 30px;
+        cursor: default;
+    }
+    .header-logout{
+        cursor: pointer;
+    }
+    .anticon{
+        margin-right: 5px;
     }
 }

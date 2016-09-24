@@ -8,11 +8,14 @@ const columns = [{
   // dataIndex: 'name',
   render: record => <Link to={'/advertiser/'+record.key}>{record.name}</Link>,
 }, {
-  title: '年龄',
-  dataIndex: 'age',
+  title: '广告主类型',
+  dataIndex: 'type',
 }, {
-  title: '住址',
-  dataIndex: 'address',
+  title: '账户状态',
+  dataIndex: 'status',
+}, {
+  title: '公司名称',
+  dataIndex: 'company',
 }];
 const data = [{
   key: '1',
@@ -49,15 +52,21 @@ const rowSelection = {
 class AdList extends Component{
     constructor(props){
         super(props);
-        this.state = {}
-        this.paginBar = data.length>15;
+        this.state = {
+          
+        }
+        this.paginBarVisible = data.length>15;
 
-        console.log(props);
+    }
+
+    getVisible(){
+      return (this.props.hidden? 'hidden' : '')
     }
 
     render(){
         return(
-             <Table columns={columns} dataSource={data} pagination={this.paginBar}/>
+            <Table className={this.getVisible()}
+              columns={columns} dataSource={data} pagination={this.paginBarVisible}/>
         ) 
     }
 }

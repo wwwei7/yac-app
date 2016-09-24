@@ -2,10 +2,9 @@ import React from 'react';
 import { Menu, Icon } from 'antd';
 import Header from '../common/Header';
 import AdList from '../AdList';
+import AdNew from '../AdNew';
 import style from './style.less';
 import 'antd/dist/antd.css';
-
-
 
 
 class homePage extends React.Component {
@@ -26,18 +25,21 @@ class homePage extends React.Component {
     return (
       <div className="wrap">
         <Header />
-        <div className="container">
-          <Menu mode="horizontal" current={this.state.current}
+        <div className="main-container">
+          <Menu mode="horizontal" 
             onClick={this.onMenuClick.bind(this)} selectedKeys={[this.state.current]}>
             <Menu.Item key="list">
-              <Icon type="mail" />列表
+              <Icon type="bars" />广告主列表
             </Menu.Item>
             <Menu.Item key="new">
-              <Icon type="appstore" />新建
+              <Icon type="plus-circle-o" />新增广告主 
             </Menu.Item>
           </Menu>
-
-          <AdList hidden={this.state.current != "list"}/>       
+     
+          <div className="panel">
+            <AdList hidden={this.state.current != "list"} />   
+            <AdNew hidden={this.state.current != "new"} />
+          </div>
         </div>
       </div>
     );

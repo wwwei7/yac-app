@@ -1,25 +1,45 @@
 .header {
-  font-size: 18px;
-  line-height: 45px;
+  font-size: 13px;
+  line-height: 50px;
+  color: #fff;
+  margin-bottom: 20px;
+  background-color: #4285f4;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
 }
 .header .container {
   width: 1024px;
   margin: 0 auto;
 }
 .header .header-logo {
-  font-size: 30px;
+  font-size: 23px;
   float: left;
+  color: #fff;
 }
 .header-user {
   float: right;
 }
 .header-user span {
-  margin-right: 30px;
+  margin-left: 30px;
+  cursor: default;
 }
-.container {
+.header-user .header-logout {
+  cursor: pointer;
+}
+.header-user .anticon {
+  margin-right: 5px;
+}
+.adnew-form {
+  margin-top: 50px;
+}
+.hidden {
+  display: none;
+}
+.main-container {
   width: 1024px;
-  margin: 0 auto;
-  padding: 30px 10px;
+  margin: 20px auto;
+}
+.panel {
+  margin: 20px 0;
 }
 /*!
  * antd v1.11.1
@@ -15858,5 +15878,32 @@ ul li.ant-transfer-list-highlight-enter {
   }
 }
 
-/*# sourceMappingURL=antd.css.map*/
+/*# sourceMappingURL=antd.css.map*/#yac-sider {
+  margin: 0 20px;
+  background: #f7f7f7;
+  float: left;
+  border-color: #f7f7f7;
+}
+#yac-sider a {
+  display: inline-block;
+}
+#yac-sider .ant-menu-item,
+#yac-sider .ant-menu-submenu-title {
+  font-size: 13px;
+  height: 55px;
+  line-height: 55px;
+  border-color: #f7f7f7;
+}
+#yac-sider .ant-menu-sub {
+  background: transparent;
+}
+#yac-sider .ant-menu-item-selected {
+  border-right: 2px solid #2db7f5;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.content {
+  margin-left: 300px;
+}
+
 /*# sourceMappingURL=style.css.map*/
