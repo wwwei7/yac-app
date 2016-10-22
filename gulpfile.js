@@ -48,6 +48,14 @@ var bin = {
   assets: "bin/assets"
 };
 
+var deploy =  {
+  root: "../yac-webserver/client",
+  html: "../yac-webserver/client",
+  style: "../yac-webserver/client/style",
+  vendor: "../yac-webserver/client/vendor",
+  assets: "../yac-webserver/client/assets"  
+}
+
 /**
  * ----------------------------------------------------
  *  tasks
@@ -68,6 +76,15 @@ function clean(done) {
  */
 function cleanBin(done) {
   del.sync(bin.root);
+  done();
+}
+
+/**
+ * [cleanBin description]
+ * @return {[type]} [description]
+ */
+function cleanDeploy(done) {
+  del.sync(deploy.root);
   done();
 }
 
@@ -96,6 +113,15 @@ function copyAssets() {
 function copyDist() {
   return gulp.src(dist.root + '**/*')
     .pipe(gulp.dest(bin.root));
+}
+
+/**
+ * [copyDist description]
+ * @return {[type]} [description]
+ */
+function copyDistDeploy() {
+  return gulp.src(dist.root + '**/*')
+    .pipe(gulp.dest(deploy.root));
 }
 
 /**
@@ -134,9 +160,9 @@ function webpackProduction(done) {
   var config = Object.create(webpackConfig);
   config.plugins = config.plugins.concat(
     new webpack.DefinePlugin({
-      "process.env": {
-        "NODE_ENV": "production"
-      }
+      // "process.env": {
+      //   "NODE_ENV": "production"
+      // }
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin()
@@ -251,6 +277,22 @@ gulp.task("build", gulp.series(
     done();
   }
 ));
+
+/** 
+ * production deply task
+ * to yac-webserver 
+ */
+gulp.task("deploy", gulp.series(
+  clean, 
+  gulp.parallel(copyAssets, copyVendor, html, style, webpackProduction), 
+  cleanDeploy, 
+  copyDistDeploy, 
+  function(done) {
+    console.log('deploy success');
+    done();
+  }
+));
+
 
 /**
  * [handleError description]

@@ -40,13 +40,17 @@ const Sider = React.createClass({
           <Menu.Item key="reportMedia"><Icon type="area-chart" /><Link to="/reportmedia">媒体报表</Link></Menu.Item>          
         </SubMenu>
         <SubMenu key="solutionManagement" title={<span><Icon type="cloud-o" /><span>投放管理</span></span>}>
-          <Menu.Item key="solutionNew"><Icon type="plus-square" />新增推广计划</Menu.Item>
+          <Menu.Item key="solutionNew"><Icon type="plus-square" />
+            <Link to="/solution">新增推广计划</Link></Menu.Item>
           <Menu.Item key="solutionList"><Icon type="edit" /><Link to="/solutionlist">现有推广计划管理</Link></Menu.Item>
         </SubMenu>
-        <Menu.Item key="5"><Icon type="calculator" />预算管理</Menu.Item>
+        <Menu.Item key="budgetManagement"><Icon type="calculator" />
+          <Link to="/budget">预算管理</Link></Menu.Item>
         <Menu.Item key="6"><Icon type="team" />DMP人群管理</Menu.Item>
-        <Menu.Item key="7"><Icon type="pay-circle-o" />财务管理</Menu.Item>
-        <Menu.Item key="8"><Icon type="solution" />广告主信息管理</Menu.Item>
+        <Menu.Item key="financeManagement"><Icon type="pay-circle-o" />
+          <Link to="/finance">财务管理</Link></Menu.Item>
+        <Menu.Item key="adInfoManagement"><Icon type="solution" />
+          <Link to="/adinfo">广告主信息管理</Link></Menu.Item>
       </Menu>
     );
   },

@@ -209,17 +209,37 @@ webpackJsonp([0],[
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _homePage = __webpack_require__(236);
+	var _auth = __webpack_require__(236);
+	
+	var _auth2 = _interopRequireDefault(_auth);
+	
+	var _homePage = __webpack_require__(237);
 	
 	var _homePage2 = _interopRequireDefault(_homePage);
 	
-	var _reportMediaPage = __webpack_require__(246);
+	var _reportMediaPage = __webpack_require__(247);
 	
 	var _reportMediaPage2 = _interopRequireDefault(_reportMediaPage);
 	
-	var _solutionListPage = __webpack_require__(262);
+	var _solutionListPage = __webpack_require__(263);
 	
 	var _solutionListPage2 = _interopRequireDefault(_solutionListPage);
+	
+	var _solutionNewPage = __webpack_require__(265);
+	
+	var _solutionNewPage2 = _interopRequireDefault(_solutionNewPage);
+	
+	var _Budget = __webpack_require__(269);
+	
+	var _Budget2 = _interopRequireDefault(_Budget);
+	
+	var _AdInfo = __webpack_require__(270);
+	
+	var _AdInfo2 = _interopRequireDefault(_AdInfo);
+	
+	var _Finance = __webpack_require__(271);
+	
+	var _Finance2 = _interopRequireDefault(_Finance);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -240,8 +260,6 @@ webpackJsonp([0],[
 	        _this.state = {
 	            user: null
 	        };
-	
-	        //this.getUser()
 	        return _this;
 	    }
 	
@@ -254,10 +272,20 @@ webpackJsonp([0],[
 	            return _react2.default.createElement(
 	                _reactRouter.Router,
 	                { puth: '/', history: _reactRouter.hashHistory },
-	                _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _homePage2.default }),
+	                _react2.default.createElement(
+	                    _reactRouter.Route,
+	                    { path: '/' },
+	                    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'home' })
+	                ),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _homePage2.default, onEnter: _auth2.default }),
 	                _react2.default.createElement(_reactRouter.Route, { path: 'reportmedia', component: _reportMediaPage2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'solution', component: _solutionNewPage2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'solution/:id', component: _solutionNewPage2.default }),
 	                _react2.default.createElement(_reactRouter.Route, { path: 'solutionlist', component: _solutionListPage2.default }),
-	                _react2.default.createElement(_reactRouter.Route, { path: 'advertiser/:id', component: _solutionListPage2.default })
+	                _react2.default.createElement(_reactRouter.Route, { path: 'advertiser/:id', component: _solutionListPage2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'budget', component: _Budget2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'adinfo', component: _AdInfo2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: 'finance', component: _Finance2.default })
 	            );
 	        }
 	    }]);
@@ -5921,6 +5949,29 @@ webpackJsonp([0],[
 
 /***/ },
 /* 236 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var auth = function auth() {
+	    console.log('auth');
+	
+	    fetch('http://localhost:3000/i/user/123', {
+	        mode: 'no-cors'
+	    }).then(function (res) {
+	        console.log('from: ' + res.user);
+	    }, function (e) {
+	        console.log('error');
+	    });
+	};
+	
+	exports.default = auth;
+
+/***/ },
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5935,25 +5986,25 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
-	var _Header = __webpack_require__(238);
+	var _Header = __webpack_require__(239);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _AdList = __webpack_require__(240);
+	var _AdList = __webpack_require__(241);
 	
 	var _AdList2 = _interopRequireDefault(_AdList);
 	
-	var _AdNew = __webpack_require__(242);
+	var _AdNew = __webpack_require__(243);
 	
 	var _AdNew2 = _interopRequireDefault(_AdNew);
 	
-	var _style = __webpack_require__(244);
+	var _style = __webpack_require__(245);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
-	__webpack_require__(245);
+	__webpack_require__(246);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6028,7 +6079,7 @@ webpackJsonp([0],[
 	exports.default = homePage;
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -58469,7 +58520,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=antd.js.map
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58484,11 +58535,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _style = __webpack_require__(239);
+	var _style = __webpack_require__(240);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -58571,13 +58622,13 @@ webpackJsonp([0],[
 	exports.default = Header;
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58592,11 +58643,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _style = __webpack_require__(241);
+	var _style = __webpack_require__(242);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -58691,13 +58742,13 @@ webpackJsonp([0],[
 	exports.default = AdList;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58712,9 +58763,9 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
-	var _style = __webpack_require__(243);
+	var _style = __webpack_require__(244);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -58727,8 +58778,8 @@ webpackJsonp([0],[
 	  return false;
 	}
 	
-	var BasicDemo = _react2.default.createClass({
-	  displayName: 'BasicDemo',
+	var AdNewForm = _react2.default.createClass({
+	  displayName: 'AdNewForm',
 	  handleReset: function handleReset(e) {
 	    e.preventDefault();
 	    this.props.form.resetFields();
@@ -58794,18 +58845,6 @@ webpackJsonp([0],[
 	        trigger: ['onBlur', 'onChange']
 	      }]
 	    });
-	    var passwdProps = getFieldProps('passwd', {
-	      rules: [{ required: true, whitespace: true, message: '请填写密码' }, { validator: this.checkPass }]
-	    });
-	    var rePasswdProps = getFieldProps('rePasswd', {
-	      rules: [{
-	        required: true,
-	        whitespace: true,
-	        message: '请再次输入密码'
-	      }, {
-	        validator: this.checkPass2
-	      }]
-	    });
 	    var textareaProps = getFieldProps('textarea', {});
 	    var formItemLayout = {
 	      labelCol: { span: 7 },
@@ -58813,16 +58852,16 @@ webpackJsonp([0],[
 	    };
 	    var protocol = _react2.default.createElement(
 	      _antd.Select,
-	      { defaultValue: 'Http://', style: { width: 70 } },
+	      { defaultValue: 'http://', style: { width: 70 } },
 	      _react2.default.createElement(
 	        Option,
-	        { value: 'Http' },
-	        'Http://'
+	        { value: 'http' },
+	        'http://'
 	      ),
 	      _react2.default.createElement(
 	        Option,
-	        { value: 'Https' },
-	        'Https://'
+	        { value: 'https' },
+	        'https://'
 	      )
 	    );
 	    return _react2.default.createElement(
@@ -58831,19 +58870,11 @@ webpackJsonp([0],[
 	      _react2.default.createElement(
 	        FormItem,
 	        _extends({}, formItemLayout, {
-	          label: '用户名',
+	          label: '广告主名称',
 	          hasFeedback: true,
 	          help: isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')
 	        }),
-	        _react2.default.createElement(_antd.Input, _extends({}, nameProps, { placeholder: '实时校验，输入 JasonWood 看看' }))
-	      ),
-	      _react2.default.createElement(
-	        FormItem,
-	        _extends({}, formItemLayout, {
-	          label: '广告主单位名称',
-	          hasFeedback: true
-	        }),
-	        _react2.default.createElement(_antd.Input, companyProps)
+	        _react2.default.createElement(_antd.Input, _extends({}, nameProps, { placeholder: '' }))
 	      ),
 	      _react2.default.createElement(
 	        FormItem,
@@ -58855,17 +58886,16 @@ webpackJsonp([0],[
 	      _react2.default.createElement(
 	        FormItem,
 	        _extends({}, formItemLayout, {
-	          label: '网址'
+	          label: '联系电话'
 	        }),
-	        _react2.default.createElement(_antd.Input, { addonBefore: protocol, placeholder: 'mysite.com', id: 'site' })
+	        _react2.default.createElement(_antd.Input, contactorProps)
 	      ),
 	      _react2.default.createElement(
 	        FormItem,
 	        _extends({}, formItemLayout, {
-	          label: '邮箱',
-	          hasFeedback: true
+	          label: '网址'
 	        }),
-	        _react2.default.createElement(_antd.Input, _extends({}, emailProps, { type: 'email', placeholder: 'onBlur 与 onChange 相结合' }))
+	        _react2.default.createElement(_antd.Input, { addonBefore: protocol, placeholder: 'mysite.com', id: 'site' })
 	      ),
 	      _react2.default.createElement(
 	        FormItem,
@@ -58893,15 +58923,9 @@ webpackJsonp([0],[
 	  }
 	});
 	
-	BasicDemo = createForm()(BasicDemo);
+	AdNewForm = createForm()(AdNewForm);
 	
-	exports.default = BasicDemo;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
+	exports.default = AdNewForm;
 
 /***/ },
 /* 244 */
@@ -58917,6 +58941,12 @@ webpackJsonp([0],[
 
 /***/ },
 /* 246 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58933,17 +58963,17 @@ webpackJsonp([0],[
 	
 	var _reactDom = __webpack_require__(34);
 	
-	var _reactGoogleCharts = __webpack_require__(247);
+	var _reactGoogleCharts = __webpack_require__(248);
 	
-	var _Layout = __webpack_require__(257);
+	var _Layout = __webpack_require__(258);
 	
 	var _Layout2 = _interopRequireDefault(_Layout);
 	
-	var _style = __webpack_require__(261);
+	var _style = __webpack_require__(262);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
-	__webpack_require__(245);
+	__webpack_require__(246);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -58998,7 +59028,7 @@ webpackJsonp([0],[
 	exports.default = reportMediaPage;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59015,7 +59045,7 @@ webpackJsonp([0],[
 	
 	//import googleChartLoader from './components/GoogleChartLoader';
 	
-	var _componentsChart = __webpack_require__(248);
+	var _componentsChart = __webpack_require__(249);
 	
 	var _componentsChart2 = _interopRequireDefault(_componentsChart);
 	
@@ -59025,7 +59055,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59048,19 +59078,19 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _bluebird = __webpack_require__(249);
+	var _bluebird = __webpack_require__(250);
 	
 	var _bluebird2 = _interopRequireDefault(_bluebird);
 	
-	var _constantsDEFAULT_CHART_COLORS = __webpack_require__(251);
+	var _constantsDEFAULT_CHART_COLORS = __webpack_require__(252);
 	
 	var _constantsDEFAULT_CHART_COLORS2 = _interopRequireDefault(_constantsDEFAULT_CHART_COLORS);
 	
-	var _GoogleChartLoader = __webpack_require__(252);
+	var _GoogleChartLoader = __webpack_require__(253);
 	
 	var _GoogleChartLoader2 = _interopRequireDefault(_GoogleChartLoader);
 	
-	var debug = __webpack_require__(253)('react-google-charts:Chart');
+	var debug = __webpack_require__(254)('react-google-charts:Chart');
 	
 	var uniqueID = 0;
 	
@@ -59409,7 +59439,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, global, setImmediate) {/* @preserve
@@ -65010,10 +65040,10 @@ webpackJsonp([0],[
 	
 	},{"./es5":13}]},{},[4])(4)
 	});                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), (function() { return this; }()), __webpack_require__(250).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), (function() { return this; }()), __webpack_require__(251).setImmediate))
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(3).nextTick;
@@ -65092,10 +65122,10 @@ webpackJsonp([0],[
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(250).setImmediate, __webpack_require__(250).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(251).setImmediate, __webpack_require__(251).clearImmediate))
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports) {
 
 	//Taken from http://there4development.com/blog/2012/05/02/google-chart-color-list/
@@ -65105,7 +65135,7 @@ webpackJsonp([0],[
 	module.exports = ['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395', '#994499', '#22AA99', '#AAAA11', '#6633CC', '#E67300', '#8B0707', '#329262', '#5574A6', '#3B3EAC'];
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//GoogleChartLoader Singleton
@@ -65119,12 +65149,12 @@ webpackJsonp([0],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _bluebird = __webpack_require__(249);
+	var _bluebird = __webpack_require__(250);
 	
 	var _bluebird2 = _interopRequireDefault(_bluebird);
 	
-	var debug = __webpack_require__(253)('react-google-charts:GoogleChartLoader');
-	var script = typeof window !== 'undefined' ? __webpack_require__(256) : null;
+	var debug = __webpack_require__(254)('react-google-charts:GoogleChartLoader');
+	var script = typeof window !== 'undefined' ? __webpack_require__(257) : null;
 	
 	var googleChartLoader = {
 	
@@ -65164,7 +65194,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -65174,7 +65204,7 @@ webpackJsonp([0],[
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(254);
+	exports = module.exports = __webpack_require__(255);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -65338,7 +65368,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -65354,7 +65384,7 @@ webpackJsonp([0],[
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(255);
+	exports.humanize = __webpack_require__(256);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -65541,7 +65571,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports) {
 
 	/**
@@ -65672,7 +65702,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -65801,7 +65831,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65816,17 +65846,17 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
-	var _Header = __webpack_require__(238);
+	var _Header = __webpack_require__(239);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _SiderBar = __webpack_require__(258);
+	var _SiderBar = __webpack_require__(259);
 	
 	var _SiderBar2 = _interopRequireDefault(_SiderBar);
 	
-	var _style = __webpack_require__(260);
+	var _style = __webpack_require__(261);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -65860,7 +65890,7 @@ webpackJsonp([0],[
 	        _react2.default.createElement(_SiderBar2.default, { current: this.props.current, open: this.props.open }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'content' },
+	          { className: this.props.current.toLowerCase() + " content" },
 	          this.props.children
 	        )
 	      );
@@ -65873,7 +65903,7 @@ webpackJsonp([0],[
 	exports.default = Layout;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65886,11 +65916,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _antd = __webpack_require__(237);
+	var _antd = __webpack_require__(238);
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _style = __webpack_require__(259);
+	var _style = __webpack_require__(260);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -65981,7 +66011,11 @@ webpackJsonp([0],[
 	          _antd.Menu.Item,
 	          { key: 'solutionNew' },
 	          _react2.default.createElement(_antd.Icon, { type: 'plus-square' }),
-	          '新增推广计划'
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/solution' },
+	            '新增推广计划'
+	          )
 	        ),
 	        _react2.default.createElement(
 	          _antd.Menu.Item,
@@ -65996,9 +66030,13 @@ webpackJsonp([0],[
 	      ),
 	      _react2.default.createElement(
 	        _antd.Menu.Item,
-	        { key: '5' },
+	        { key: 'budgetManagement' },
 	        _react2.default.createElement(_antd.Icon, { type: 'calculator' }),
-	        '预算管理'
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/budget' },
+	          '预算管理'
+	        )
 	      ),
 	      _react2.default.createElement(
 	        _antd.Menu.Item,
@@ -66008,27 +66046,29 @@ webpackJsonp([0],[
 	      ),
 	      _react2.default.createElement(
 	        _antd.Menu.Item,
-	        { key: '7' },
+	        { key: 'financeManagement' },
 	        _react2.default.createElement(_antd.Icon, { type: 'pay-circle-o' }),
-	        '财务管理'
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/finance' },
+	          '财务管理'
+	        )
 	      ),
 	      _react2.default.createElement(
 	        _antd.Menu.Item,
-	        { key: '8' },
+	        { key: 'adInfoManagement' },
 	        _react2.default.createElement(_antd.Icon, { type: 'solution' }),
-	        '广告主信息管理'
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/adinfo' },
+	          '广告主信息管理'
+	        )
 	      )
 	    );
 	  }
 	});
 	
 	exports.default = Sider;
-
-/***/ },
-/* 259 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
 
 /***/ },
 /* 260 */
@@ -66044,6 +66084,12 @@ webpackJsonp([0],[
 
 /***/ },
 /* 262 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66058,15 +66104,19 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Layout = __webpack_require__(257);
+	var _Layout = __webpack_require__(258);
 	
 	var _Layout2 = _interopRequireDefault(_Layout);
 	
-	var _style = __webpack_require__(263);
+	var _antd = __webpack_require__(238);
+	
+	var _reactRouter = __webpack_require__(173);
+	
+	var _style = __webpack_require__(264);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
-	__webpack_require__(245);
+	__webpack_require__(246);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -66075,6 +66125,43 @@ webpackJsonp([0],[
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var columns = [{
+	  title: '广告主名称',
+	  // dataIndex: 'name',
+	  render: function render(record) {
+	    return _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: '/advertiser/' + record.key },
+	      record.name
+	    );
+	  }
+	}, {
+	  title: '广告主类型',
+	  dataIndex: 'type'
+	}, {
+	  title: '账户状态',
+	  dataIndex: 'status'
+	}, {
+	  title: '公司名称',
+	  dataIndex: 'company'
+	}];
+	var data = [{
+	  key: '1',
+	  name: '梅赛德斯',
+	  age: 32,
+	  address: '西湖区湖底公园1号'
+	}, {
+	  key: '2',
+	  name: '西门子',
+	  age: 42,
+	  address: '西湖区湖底公园1号'
+	}, {
+	  key: '3',
+	  name: '三菱',
+	  age: 32,
+	  address: '西湖区湖底公园1号'
+	}];
 	
 	var solutionListPage = function (_React$Component) {
 	  _inherits(solutionListPage, _React$Component);
@@ -66085,6 +66172,8 @@ webpackJsonp([0],[
 	    var _this = _possibleConstructorReturn(this, (solutionListPage.__proto__ || Object.getPrototypeOf(solutionListPage)).call(this, props));
 	
 	    _this.state = {};
+	
+	    _this.paginBarVisible = data.length > 15;
 	    return _this;
 	  }
 	
@@ -66096,9 +66185,11 @@ webpackJsonp([0],[
 	        { current: 'solutionList', open: 'solutionManagement' },
 	        _react2.default.createElement(
 	          'h1',
-	          null,
+	          { className: 'page-title' },
 	          ' Solution Management '
-	        )
+	        ),
+	        _react2.default.createElement(_antd.Table, { className: this.props.hidden ? 'hidden' : '',
+	          columns: columns, dataSource: data, pagination: this.paginBarVisible })
 	      );
 	    }
 	  }]);
@@ -66109,10 +66200,791 @@ webpackJsonp([0],[
 	exports.default = solutionListPage;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _antd = __webpack_require__(238);
+	
+	var _Layout = __webpack_require__(258);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	var _style = __webpack_require__(266);
+	
+	var _style2 = _interopRequireDefault(_style);
+	
+	var _Region = __webpack_require__(267);
+	
+	var _Region2 = _interopRequireDefault(_Region);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var createForm = _antd.Form.create;
+	var FormItem = _antd.Form.Item;
+	var RadioGroup = _antd.Radio.RadioGroup;
+	
+	var SolutionPage = _react2.default.createClass({
+	  displayName: 'SolutionPage',
+	  getInitialState: function getInitialState() {
+	    return {
+	      value: 1
+	    };
+	  },
+	  onChange: function onChange(e) {
+	    console.log('radio checked', e.target.value);
+	    this.setState({
+	      value: e.target.value
+	    });
+	  },
+	  handleReset: function handleReset(e) {
+	    e.preventDefault();
+	    this.props.form.resetFields();
+	  },
+	  handleSubmit: function handleSubmit(e) {
+	    e.preventDefault();
+	    this.props.form.validateFields(function (errors, values) {
+	      if (!!errors) {
+	        console.log('Errors in form!!!');
+	        return;
+	      }
+	      console.log('Submit!!!');
+	      console.log(values);
+	    });
+	  },
+	  userExists: function userExists(rule, value, callback) {
+	    if (!value) {
+	      callback();
+	    } else {
+	      setTimeout(function () {
+	        if (value === 'JasonWood') {
+	          callback([new Error('抱歉，该用户名已被占用。')]);
+	        } else {
+	          callback();
+	        }
+	      }, 800);
+	    }
+	  },
+	  checkPass: function checkPass(rule, value, callback) {
+	    var validateFields = this.props.form.validateFields;
+	
+	    if (value) {
+	      validateFields(['rePasswd'], { force: true });
+	    }
+	    callback();
+	  },
+	  checkPass2: function checkPass2(rule, value, callback) {
+	    var getFieldValue = this.props.form.getFieldValue;
+	
+	    if (value && value !== getFieldValue('passwd')) {
+	      callback('两次输入密码不一致！');
+	    } else {
+	      callback();
+	    }
+	  },
+	  render: function render() {
+	    var _props$form = this.props.form;
+	    var getFieldProps = _props$form.getFieldProps;
+	    var getFieldError = _props$form.getFieldError;
+	    var isFieldValidating = _props$form.isFieldValidating;
+	
+	    var nameProps = getFieldProps('name', {
+	      rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }, { validator: this.userExists }]
+	    });
+	    var companyProps = getFieldProps('company', {});
+	    var contactorProps = getFieldProps('company', {});
+	    var emailProps = getFieldProps('email', {
+	      validate: [{
+	        rules: [{ required: true }],
+	        trigger: 'onBlur'
+	      }, {
+	        rules: [{ type: 'email', message: '请输入正确的邮箱地址' }],
+	        trigger: ['onBlur', 'onChange']
+	      }]
+	    });
+	
+	    var textareaProps = getFieldProps('textarea', {});
+	    var formItemLayout = {
+	      labelCol: { span: 5 },
+	      wrapperCol: { span: 12 }
+	    };
+	
+	    return _react2.default.createElement(
+	      _Layout2.default,
+	      { current: 'solutionNew', open: 'solutionManagement', className: 'solutionnew' },
+	      _react2.default.createElement(
+	        'h1',
+	        { className: 'page-title' },
+	        '新增推广计划'
+	      ),
+	      _react2.default.createElement(
+	        _antd.Form,
+	        { horizontal: true, className: this.props.hidden ? 'adnew-form hidden' : 'adnew-form' },
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '推广计划名称'
+	          }),
+	          _react2.default.createElement(_antd.Input, contactorProps)
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '开始时间',
+	            hasFeedback: true
+	          }),
+	          _react2.default.createElement(_antd.DatePicker, null)
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '结束时间',
+	            hasFeedback: true
+	          }),
+	          _react2.default.createElement(_antd.DatePicker, null)
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '出价设置'
+	          }),
+	          _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'ant-row ant-form-item region' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'ant-col-5 ant-form-item-label' },
+	            _react2.default.createElement(
+	              'label',
+	              { className: '' },
+	              '地域'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'ant-col-12' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ant-form-item-control ' },
+	              _react2.default.createElement(_Region2.default, null)
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: 'ADX渠道',
+	            style: { height: 80 }
+	          }),
+	          _react2.default.createElement(
+	            _antd.Card,
+	            { style: { width: 300 } },
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Baidu'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '媒体范围'
+	          }),
+	          _react2.default.createElement(_antd.Input, _extends({ type: 'textarea' }, contactorProps, { placeholder: '请输入域名使用分号；分隔' }))
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          _extends({}, formItemLayout, {
+	            label: '日预算上限设置'
+	          }),
+	          _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 1 })
+	        ),
+	        _react2.default.createElement(
+	          FormItem,
+	          { wrapperCol: { span: 12, offset: 7 } },
+	          _react2.default.createElement(
+	            _antd.Button,
+	            { type: 'primary', onClick: this.handleSubmit },
+	            '保存'
+	          ),
+	          '   ',
+	          _react2.default.createElement(
+	            _antd.Button,
+	            { type: 'ghost', onClick: this.handleReset },
+	            '重置'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	SolutionPage = createForm()(SolutionPage);
+	
+	exports.default = SolutionPage;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _antd = __webpack_require__(238);
+	
+	var _style = __webpack_require__(268);
+	
+	var _style2 = _interopRequireDefault(_style);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RadioGroup = _antd.Radio.Group;
+	var FromItem = _antd.Form.FormItem;
+	
+	var cityOptions = [{
+	  value: '浙江',
+	  label: '浙江',
+	  children: [{
+	    value: '',
+	    label: '杭州',
+	    children: [{
+	      value: 'town',
+	      label: '市区'
+	    }]
+	  }]
+	}, {
+	  value: '江苏',
+	  label: '江苏',
+	  children: [{
+	    value: '南京',
+	    label: '南京',
+	    children: [{
+	      value: 'new',
+	      label: '新城区'
+	    }, {
+	      value: 'old',
+	      label: '老城区'
+	    }]
+	  }]
+	}];
+	
+	var Region = function (_React$Component) {
+	  _inherits(Region, _React$Component);
+	
+	  function Region(props) {
+	    _classCallCheck(this, Region);
+	
+	    var _this = _possibleConstructorReturn(this, (Region.__proto__ || Object.getPrototypeOf(Region)).call(this, props));
+	
+	    _this.state = {
+	      value: 1
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Region, [{
+	    key: 'onChange',
+	    value: function onChange(e) {
+	      console.log('radio checked', e.target.value);
+	      this.setState({
+	        value: e.target.value
+	      });
+	      // this.state.value = e.target.value;
+	    }
+	  }, {
+	    key: 'cityOnChange',
+	    value: function cityOnChange(e) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        RadioGroup,
+	        { onChange: this.onChange.bind(this), value: this.state.value, className: 'region-group' },
+	        _react2.default.createElement(
+	          _antd.Radio,
+	          { className: 'radio-item', key: 'a', value: 1 },
+	          '无地域定向（全网）'
+	        ),
+	        _react2.default.createElement(
+	          _antd.Radio,
+	          { className: 'radio-item', key: 'b', value: 2 },
+	          '选择城市定向'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: this.state.value == 2 ? 'city' : 'hidden' },
+	          _react2.default.createElement(_antd.Cascader, { size: 'large', options: cityOptions, onChange: this.cityOnChange, changeOnSelect: true })
+	        ),
+	        _react2.default.createElement(
+	          _antd.Radio,
+	          { className: 'radio-item', key: 'd', value: 3 },
+	          '自定义IP地域库'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: this.state.value == 3 ? 'ip' : 'hidden' },
+	          _react2.default.createElement(_antd.Input, { type: 'textarea', placeholder: '请使用分号（；）分隔', id: 'textarea', name: 'textarea' })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Region;
+	}(_react2.default.Component);
+	
+	exports.default = Region;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _antd = __webpack_require__(238);
+	
+	var _Layout = __webpack_require__(258);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var createForm = _antd.Form.create;
+	var FormItem = _antd.Form.Item;
+	
+	var BudgetForm = function (_React$Component) {
+	  _inherits(BudgetForm, _React$Component);
+	
+	  function BudgetForm(props) {
+	    _classCallCheck(this, BudgetForm);
+	
+	    var _this = _possibleConstructorReturn(this, (BudgetForm.__proto__ || Object.getPrototypeOf(BudgetForm)).call(this, props));
+	
+	    _this.state = {};
+	    return _this;
+	  }
+	
+	  _createClass(BudgetForm, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {}
+	  }, {
+	    key: 'handleReset',
+	    value: function handleReset() {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var formItemLayout = {
+	        labelCol: { span: 5 },
+	        wrapperCol: { span: 12 }
+	      };
+	      return _react2.default.createElement(
+	        _Layout2.default,
+	        { current: 'budgetManagement' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'page-title' },
+	          ' 预算管理'
+	        ),
+	        _react2.default.createElement(
+	          _antd.Form,
+	          { horizontal: true, className: this.props.hidden ? 'adnew-form hidden' : 'adnew-form' },
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: 'CPM'
+	            }),
+	            _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: 'CPC'
+	            }),
+	            _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: 'CTR'
+	            }),
+	            _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '日预算花费上限'
+	            }),
+	            _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '月预算花费上限'
+	            }),
+	            _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            { wrapperCol: { span: 6, offset: 4 } },
+	            _react2.default.createElement(
+	              _antd.Button,
+	              { type: 'primary', onClick: this.handleSubmit },
+	              '保存'
+	            ),
+	            '   ',
+	            _react2.default.createElement(
+	              _antd.Button,
+	              { type: 'ghost', onClick: this.handleReset },
+	              '重置'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return BudgetForm;
+	}(_react2.default.Component);
+	
+	BudgetForm = createForm()(BudgetForm);
+	
+	exports.default = BudgetForm;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _antd = __webpack_require__(238);
+	
+	var _Layout = __webpack_require__(258);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var createForm = _antd.Form.create;
+	var FormItem = _antd.Form.Item;
+	
+	var AdInfoForm = function (_React$Component) {
+	  _inherits(AdInfoForm, _React$Component);
+	
+	  function AdInfoForm(props) {
+	    _classCallCheck(this, AdInfoForm);
+	
+	    var _this = _possibleConstructorReturn(this, (AdInfoForm.__proto__ || Object.getPrototypeOf(AdInfoForm)).call(this, props));
+	
+	    _this.state = {};
+	    return _this;
+	  }
+	
+	  _createClass(AdInfoForm, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props$form = this.props.form;
+	      var getFieldProps = _props$form.getFieldProps;
+	      var getFieldError = _props$form.getFieldError;
+	      var isFieldValidating = _props$form.isFieldValidating;
+	
+	      var nameProps = getFieldProps('name', {
+	        rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }, { validator: this.userExists }]
+	      });
+	      var companyProps = getFieldProps('company', {});
+	      var contactorProps = getFieldProps('company', {});
+	      var emailProps = getFieldProps('email', {
+	        validate: [{
+	          rules: [{ required: true }],
+	          trigger: 'onBlur'
+	        }, {
+	          rules: [{ type: 'email', message: '请输入正确的邮箱地址' }],
+	          trigger: ['onBlur', 'onChange']
+	        }]
+	      });
+	      var textareaProps = getFieldProps('textarea', {});
+	      var formItemLayout = {
+	        labelCol: { span: 4 },
+	        wrapperCol: { span: 12 }
+	      };
+	      var protocol = _react2.default.createElement(
+	        _antd.Select,
+	        { defaultValue: 'http://', style: { width: 70 } },
+	        _react2.default.createElement(
+	          Option,
+	          { value: 'http' },
+	          'http://'
+	        ),
+	        _react2.default.createElement(
+	          Option,
+	          { value: 'https' },
+	          'https://'
+	        )
+	      );
+	      return _react2.default.createElement(
+	        _Layout2.default,
+	        { current: 'adInfoManagement' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'page-title' },
+	          '广告主信息管理'
+	        ),
+	        _react2.default.createElement(
+	          _antd.Form,
+	          { horizontal: true, className: this.props.hidden ? 'adnew-form hidden' : 'adnew-form' },
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '广告主名称',
+	              hasFeedback: true,
+	              help: isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')
+	            }),
+	            _react2.default.createElement(_antd.Input, _extends({}, nameProps, { placeholder: '' }))
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '联系人'
+	            }),
+	            _react2.default.createElement(_antd.Input, contactorProps)
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '联系电话'
+	            }),
+	            _react2.default.createElement(_antd.Input, contactorProps)
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '网址'
+	            }),
+	            _react2.default.createElement(_antd.Input, { addonBefore: protocol, placeholder: 'mysite.com', id: 'site' })
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            _extends({}, formItemLayout, {
+	              label: '广告落地页白名单'
+	            }),
+	            _react2.default.createElement(_antd.Input, _extends({}, textareaProps, { type: 'textarea', placeholder: '请使用分号（；）分隔', id: 'textarea', name: 'textarea' }))
+	          ),
+	          _react2.default.createElement(
+	            FormItem,
+	            { wrapperCol: { span: 12, offset: 7 } },
+	            _react2.default.createElement(
+	              _antd.Button,
+	              { type: 'primary', onClick: this.handleSubmit },
+	              '保存'
+	            ),
+	            '   ',
+	            _react2.default.createElement(
+	              _antd.Button,
+	              { type: 'ghost', onClick: this.handleReset },
+	              '重置'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return AdInfoForm;
+	}(_react2.default.Component);
+	
+	AdInfoForm = createForm()(AdInfoForm);
+	
+	exports.default = AdInfoForm;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _antd = __webpack_require__(238);
+	
+	var _Layout = __webpack_require__(258);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var createForm = _antd.Form.create;
+	var FormItem = _antd.Form.Item;
+	
+	var FinanceForm = function (_React$Component) {
+	  _inherits(FinanceForm, _React$Component);
+	
+	  function FinanceForm(props) {
+	    _classCallCheck(this, FinanceForm);
+	
+	    var _this = _possibleConstructorReturn(this, (FinanceForm.__proto__ || Object.getPrototypeOf(FinanceForm)).call(this, props));
+	
+	    _this.state = {};
+	    return _this;
+	  }
+	
+	  _createClass(FinanceForm, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {}
+	  }, {
+	    key: 'handleReset',
+	    value: function handleReset() {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var formItemLayout = {
+	        labelCol: { span: 5 },
+	        wrapperCol: { span: 12 }
+	      };
+	      return _react2.default.createElement(
+	        _Layout2.default,
+	        { current: 'financeManagement' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'page-title' },
+	          '充值管理'
+	        ),
+	        _react2.default.createElement(
+	          _antd.Spin,
+	          { size: 'large' },
+	          _react2.default.createElement(
+	            _antd.Form,
+	            { horizontal: true, className: this.props.hidden ? 'adnew-form hidden' : 'adnew-form' },
+	            _react2.default.createElement(
+	              FormItem,
+	              _extends({}, formItemLayout, {
+	                label: '当前广告主充值金额'
+	              }),
+	              _react2.default.createElement(_antd.InputNumber, { min: 0, max: 10000, step: 0.01 })
+	            ),
+	            _react2.default.createElement(
+	              FormItem,
+	              { wrapperCol: { span: 6, offset: 2 } },
+	              _react2.default.createElement(
+	                _antd.Button,
+	                { type: 'primary', onClick: this.handleSubmit },
+	                '充值'
+	              ),
+	              '   ',
+	              _react2.default.createElement(
+	                _antd.Button,
+	                { type: 'ghost', onClick: this.handleReset },
+	                '重置'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return FinanceForm;
+	}(_react2.default.Component);
+	
+	FinanceForm = createForm()(FinanceForm);
+	
+	exports.default = FinanceForm;
 
 /***/ }
 ]);

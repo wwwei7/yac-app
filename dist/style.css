@@ -15904,6 +15904,36 @@ ul li.ant-transfer-list-highlight-enter {
 }
 .content {
   margin-left: 300px;
+  margin-right: 50px;
+  overflow: auto;
+}
+.page-title {
+  margin: 20px 0;
+}
+.solutionnew .ant-input {
+  height: 32px;
+}
+.solutionnew .region {
+  min-height: 100px;
+  height: auto;
+  overflow: auto;
+}
+.solutionnew .region .radio-item {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+}
+.region .city {
+  width: 300px;
+  margin-left: 30px;
+}
+.region .ip {
+  width: 300px;
+  min-height: 60px;
+  margin-left: 30px;
+}
+.region .ip textarea {
+  min-height: 60px;
 }
 
 /*# sourceMappingURL=style.css.map*/

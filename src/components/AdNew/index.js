@@ -8,7 +8,7 @@ function noop() {
   return false;
 }
 
-let BasicDemo = React.createClass({
+let AdNewForm = React.createClass({
   handleReset(e) {
     e.preventDefault();
     this.props.form.resetFields();
@@ -80,21 +80,6 @@ let BasicDemo = React.createClass({
         trigger: ['onBlur', 'onChange'],
       }],
     });
-    const passwdProps = getFieldProps('passwd', {
-      rules: [
-        { required: true, whitespace: true, message: '请填写密码' },
-        { validator: this.checkPass },
-      ],
-    });
-    const rePasswdProps = getFieldProps('rePasswd', {
-      rules: [{
-        required: true,
-        whitespace: true,
-        message: '请再次输入密码',
-      }, {
-        validator: this.checkPass2,
-      }],
-    });
     const textareaProps = getFieldProps('textarea', {
       
     });
@@ -103,28 +88,20 @@ let BasicDemo = React.createClass({
       wrapperCol: { span: 12 },
     };
     const protocol = (
-      <Select defaultValue="Http://" style={{ width: 70 }}>
-        <Option value="Http">Http://</Option>
-        <Option value="Https">Https://</Option>
+      <Select defaultValue="http://" style={{ width: 70 }}>
+        <Option value="http">http://</Option>
+        <Option value="https">https://</Option>
       </Select>
     )
     return (
       <Form horizontal className={this.props.hidden?'adnew-form hidden':'adnew-form'}>
         <FormItem
           {...formItemLayout}
-          label="用户名"
+          label="广告主名称"
           hasFeedback
           help={isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')}
         >
-          <Input {...nameProps} placeholder="实时校验，输入 JasonWood 看看" />
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label="广告主单位名称"
-          hasFeedback
-        >
-          <Input {...companyProps} />
+          <Input {...nameProps} placeholder="" />
         </FormItem>
 
         <FormItem
@@ -135,21 +112,18 @@ let BasicDemo = React.createClass({
         </FormItem>
 
         <FormItem
+          {...formItemLayout}
+          label="联系电话"
+        >
+          <Input {...contactorProps} />
+        </FormItem>
+
+        <FormItem
           {...formItemLayout}        
           label="网址"
         >
           <Input addonBefore={protocol} placeholder="mysite.com" id="site" />
         </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label="邮箱"
-          hasFeedback
-        >
-          <Input {...emailProps} type="email" placeholder="onBlur 与 onChange 相结合" />
-        </FormItem>
-
-
 
         <FormItem
           {...formItemLayout}
@@ -168,6 +142,6 @@ let BasicDemo = React.createClass({
   },
 });
 
-BasicDemo = createForm()(BasicDemo);
+AdNewForm = createForm()(AdNewForm);
 
-export default BasicDemo;
+export default AdNewForm;
