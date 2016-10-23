@@ -17,6 +17,8 @@ var webpackConfig = require("./webpack.config.js");
 
 var connect = require('gulp-connect');
 var rest = require('connect-rest');
+var proxy = require('http-proxy-middleware');
+
 // var mocks = require('./mocks');
 
 /**
@@ -231,9 +233,12 @@ function connectServer(done) {
       port: 3111,
       livereload: true,
       middleware: function(connect, opt) {
-        return [rest.rester({
-          context: "/"
-        })]
+        return [
+          proxy('/i', {
+            target: 'http://localhost:3000',
+            changeOrigin:true
+          })
+        ]
       }
   });
 //   mocks(rest);

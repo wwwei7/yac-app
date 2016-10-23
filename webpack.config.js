@@ -20,6 +20,7 @@ var config = {
             exclude: /node_modules/,
             loader: 'babel',
             query: {
+                plugins: ['transform-runtime'],                
                 presets: ['es2015', 'stage-0', 'react']
             }
           },
@@ -40,7 +41,10 @@ var config = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-        new ExtractTextPlugin("style.css")
+        new ExtractTextPlugin("style.css"),
+        new webpack.ProvidePlugin({
+            'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+        })
     ],
     eslint: {
         configFile: './.eslintrc'

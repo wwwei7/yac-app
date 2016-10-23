@@ -1,11 +1,16 @@
+
+
 const auth = function(){
-    console.log('auth')
     
-    fetch('http://localhost:3000/i/user/123',{
-        mode: 'no-cors'
+
+    fetch('/i/user/123',{
+        method: 'GET'
     }).then(function(res){
-        console.log('from: '+ res.user)
-    },function(e){
+        console.log('from: '+ res)
+        return res.json()
+    }).then(function(data){
+        console.log(data)
+    }).catch(function(e){
         console.log('error')
     })
 }
