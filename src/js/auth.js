@@ -1,15 +1,20 @@
 
 
-const auth = function(){
+const auth = function(nextState, replace, next){
     
-
-    fetch('/i/user/123',{
+    fetch('/action/check',{
         method: 'GET'
     }).then(function(res){
-        console.log('from: '+ res)
         return res.json()
     }).then(function(data){
-        console.log(data)
+        console.log(data);
+        if(data.user){
+            // set user object to next component
+            nextState.routes[0].user = data.user;
+            next();
+        }else{
+            alert('need login')
+        }
     }).catch(function(e){
         console.log('error')
     })

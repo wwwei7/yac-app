@@ -15,6 +15,13 @@ class homePage extends React.Component {
     };
   }
 
+  componentDidMount(){
+    this.props.route.user;
+    this.setState({
+      user: this.props.route.user
+    })
+  }
+
   onMenuClick(e){
     this.setState({
       current: e.key
@@ -24,7 +31,7 @@ class homePage extends React.Component {
   render() {
     return (
       <div className="wrap">
-        <Header />
+        <Header user={this.state.user}/>
         <div className="main-container">
           <Menu mode="horizontal" 
             onClick={this.onMenuClick.bind(this)} selectedKeys={[this.state.current]}>

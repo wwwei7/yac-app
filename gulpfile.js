@@ -162,9 +162,9 @@ function webpackProduction(done) {
   var config = Object.create(webpackConfig);
   config.plugins = config.plugins.concat(
     new webpack.DefinePlugin({
-      // "process.env": {
-      //   "NODE_ENV": "production"
-      // }
+      "process.env": { 
+        NODE_ENV: JSON.stringify("production") 
+      }
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin()
@@ -235,6 +235,10 @@ function connectServer(done) {
       middleware: function(connect, opt) {
         return [
           proxy('/i', {
+            target: 'http://localhost:3000',
+            changeOrigin:true
+          }),
+          proxy('/action', {
             target: 'http://localhost:3000',
             changeOrigin:true
           })

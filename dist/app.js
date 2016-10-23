@@ -283,7 +283,7 @@ webpackJsonp([0],[
 	        value: function render() {
 	            return _react2.default.createElement(
 	                _reactRouter.Router,
-	                { puth: '/', history: _reactRouter.hashHistory },
+	                { path: '/', history: _reactRouter.hashHistory },
 	                _react2.default.createElement(
 	                    _reactRouter.Route,
 	                    { path: '/' },
@@ -7499,15 +7499,21 @@ webpackJsonp([0],[
 	});
 	
 	
-	var auth = function auth() {
+	var auth = function auth(nextState, replace, next) {
 	
-	    fetch('/i/user/123', {
+	    fetch('/action/check', {
 	        method: 'GET'
 	    }).then(function (res) {
-	        console.log('from: ' + res);
 	        return res.json();
 	    }).then(function (data) {
 	        console.log(data);
+	        if (data.user) {
+	            // set user object to next component
+	            nextState.routes[0].user = data.user;
+	            next();
+	        } else {
+	            alert('need login');
+	        }
 	    }).catch(function (e) {
 	        console.log('error');
 	    });
@@ -8034,6 +8040,14 @@ webpackJsonp([0],[
 	  }
 	
 	  (0, _createClass3.default)(homePage, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.route.user;
+	      this.setState({
+	        user: this.props.route.user
+	      });
+	    }
+	  }, {
 	    key: 'onMenuClick',
 	    value: function onMenuClick(e) {
 	      this.setState({
@@ -8046,7 +8060,7 @@ webpackJsonp([0],[
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'wrap' },
-	        _react2.default.createElement(_Header2.default, null),
+	        _react2.default.createElement(_Header2.default, { user: this.state.user }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'main-container' },
@@ -60580,12 +60594,27 @@ webpackJsonp([0],[
 	  }
 	
 	  (0, _createClass3.default)(Header, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var self = this;
+	      var roleMap = {
+	        'agency': '代理商用户'
+	      };
+	      setTimeout(function () {
+	        self.setState({
+	          name: self.props.user.name,
+	          role: self.props.user.role,
+	          roleName: roleMap[self.props.user.role]
+	        });
+	      }, 300);
+	    }
+	  }, {
 	    key: 'logout',
 	    value: function logout() {
 	      _antd.Modal.confirm({
 	        title: '是否退出当前账户',
 	        onOk: function onOk() {
-	          console.log('确定');
+	          window.location = '/';
 	        },
 	        onCancel: function onCancel() {}
 	      });
@@ -60611,14 +60640,12 @@ webpackJsonp([0],[
 	              'span',
 	              null,
 	              '欢迎：',
-	              this.props.name,
-	              'React'
+	              this.state.name
 	            ),
 	            _react2.default.createElement(
 	              'span',
 	              null,
-	              this.props.role,
-	              ' 代理商用户'
+	              this.state.roleName
 	            ),
 	            _react2.default.createElement(
 	              'span',

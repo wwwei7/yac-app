@@ -26,7 +26,7 @@ class Routes extends Component{
 
     render(){
         return (
-            <Router puth="/" history={hashHistory}>
+            <Router path="/" history={hashHistory}>
                 <Route path="/">
                     <IndexRedirect to="home" />
                 </Route>
