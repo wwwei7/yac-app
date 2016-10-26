@@ -19,17 +19,14 @@ const Sider = React.createClass({
     });
   }, 
   onToggle(info) {
-    this.setState({
-      openKeys: info.open ? info.keyPath : info.keyPath.slice(1),
-    });
+    this.setState({openKeys:[info[1]]})
   },
   render() {
     return (
       <Menu onClick={this.handleClick}
         style={{ width: 240 }}
-        openKeys={this.state.openKeys}
-        onOpen={this.onToggle}
-        onClose={this.onToggle}
+        openKeys={this.state.openKeys}  
+        onOpenChange={this.onToggle}
         selectedKeys={[this.state.current]}
         mode="inline"
         id="yac-sider" 

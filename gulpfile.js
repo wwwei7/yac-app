@@ -234,7 +234,7 @@ function connectServer(done) {
       livereload: true,
       middleware: function(connect, opt) {
         return [
-          proxy('/i', {
+          proxy('/api', {
             target: 'http://localhost:3000',
             changeOrigin:true
           }),

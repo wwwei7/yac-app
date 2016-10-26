@@ -14,31 +14,8 @@ class AdInfoForm extends React.Component{
 
 
   render() {
-    const { getFieldProps, getFieldError, isFieldValidating } = this.props.form;
-    const nameProps = getFieldProps('name', {
-      rules: [
-        { required: true, min: 5, message: '用户名至少为 5 个字符' },
-        { validator: this.userExists },
-      ],
-    });
-    const companyProps = getFieldProps('company',{});
-    const contactorProps = getFieldProps('company',{});    
-    const emailProps = getFieldProps('email', {
-      validate: [{
-        rules: [
-          { required: true },
-        ],
-        trigger: 'onBlur',
-      }, {
-        rules: [
-          { type: 'email', message: '请输入正确的邮箱地址' },
-        ],
-        trigger: ['onBlur', 'onChange'],
-      }],
-    });
-    const textareaProps = getFieldProps('textarea', {
-      
-    });
+    const { getFieldDecorator, getFieldError, isFieldValidating } = this.props.form;
+
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 12 },
@@ -59,21 +36,21 @@ class AdInfoForm extends React.Component{
             hasFeedback
             help={isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')}
             >
-            <Input {...nameProps} placeholder="" />
+            <Input placeholder="" />
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="联系人"
             >
-            <Input {...contactorProps} />
+            <Input />
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="联系电话"
             >
-            <Input {...contactorProps} />
+            <Input />
           </FormItem>
 
           <FormItem
@@ -87,7 +64,7 @@ class AdInfoForm extends React.Component{
             {...formItemLayout}
             label="广告落地页白名单"
             >
-            <Input {...textareaProps} type="textarea" placeholder="请使用分号（；）分隔" id="textarea" name="textarea" />
+            <Input type="textarea" placeholder="请使用分号（；）分隔" id="textarea" name="textarea" />
           </FormItem>
 
           <FormItem wrapperCol={{ span: 12, offset: 7 }}>

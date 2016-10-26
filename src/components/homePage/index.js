@@ -11,12 +11,12 @@ class homePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: "list"
+      current: "list",
+      user: {}
     };
   }
 
   componentDidMount(){
-    this.props.route.user;
     this.setState({
       user: this.props.route.user
     })
@@ -44,8 +44,8 @@ class homePage extends React.Component {
           </Menu>
      
           <div className="panel">
-            <AdList hidden={this.state.current != "list"} />   
-            <AdNew hidden={this.state.current != "new"} />
+            <AdList hidden={this.state.current != "list"} uid={this.state.user.uid}/>   
+            <AdNew hidden={this.state.current != "new"} uid={this.state.user.uid}/>
           </div>
         </div>
       </div>

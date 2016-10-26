@@ -14,20 +14,23 @@ class Header extends React.Component{
     const roleMap = {
       'agency': '代理商用户'
     }
-    setTimeout(()=>{
-      self.setState({
-        name: self.props.user.name,
-        role: self.props.user.role,
-        roleName: roleMap[self.props.user.role]
-      })
-    },300)
+    // setTimeout(()=>{
+    //   self.setState({
+    //     name: self.props.user.name,
+    //     role: self.props.user.role,
+    //     roleName: roleMap[self.props.user.role]
+    //   })
+    // },300)
   }
 
   logout(){
      Modal.confirm({
       title: '是否退出当前账户',
       onOk() {
-        window.location = '/'
+        // fetch('/action/logout',{
+        //   credentials: 'include',
+        //   method: 'GET'
+        // })
       },
       onCancel() {},
     });
@@ -39,8 +42,8 @@ class Header extends React.Component{
         <div className="container clearfix">
           <Link className="header-logo" to='/home'>Your Ad Cloud</Link>
           <div className="header-user">
-            <span>欢迎：{this.state.name}</span>
-            <span>{this.state.roleName}</span>            
+            <span>欢迎：{this.props.user?this.props.user.name:''}</span>
+            <span>{this.props.user?this.props.user.role:''}</span>            
             <span className="header-logout" onClick={this.logout}><Icon type="logout" />注销</span>
           </div>
         </div>

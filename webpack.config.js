@@ -19,8 +19,7 @@ var config = {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel',
-            query: {
-                plugins: ['transform-runtime'],                
+            query: {             
                 presets: ['es2015', 'stage-0', 'react']
             }
           },

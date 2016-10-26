@@ -72,32 +72,8 @@ let SolutionPage = React.createClass({
   },
 
   render() {
-    const { getFieldProps, getFieldError, isFieldValidating } = this.props.form;
-    const nameProps = getFieldProps('name', {
-      rules: [
-        { required: true, min: 5, message: '用户名至少为 5 个字符' },
-        { validator: this.userExists },
-      ],
-    });
-    const companyProps = getFieldProps('company',{});
-    const contactorProps = getFieldProps('company',{});    
-    const emailProps = getFieldProps('email', {
-      validate: [{
-        rules: [
-          { required: true },
-        ],
-        trigger: 'onBlur',
-      }, {
-        rules: [
-          { type: 'email', message: '请输入正确的邮箱地址' },
-        ],
-        trigger: ['onBlur', 'onChange'],
-      }],
-    });
+    const { getFieldDecorator, getFieldError, isFieldValidating } = this.props.form;
 
-    const textareaProps = getFieldProps('textarea', {
-      
-    });
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 12 },
@@ -111,7 +87,14 @@ let SolutionPage = React.createClass({
             {...formItemLayout}
             label="推广计划名称"
           >
-            <Input {...contactorProps} />
+            {getFieldDecorator('name', {
+              rules: [
+                { required: true, min: 5, max: 16, message: '推广计划名称长度范围需要在3~16个字符之间' },
+                { validator: this.userExists },
+              ],
+            })(
+              <Input />
+            )}
           </FormItem>
         
           <FormItem
@@ -161,7 +144,7 @@ let SolutionPage = React.createClass({
             {...formItemLayout}
             label="媒体范围"
           >
-            <Input type="textarea" {...contactorProps} placeholder="请输入域名使用分号；分隔"/>
+            <Input type="textarea" placeholder="请输入域名使用分号；分隔"/>
           </FormItem>
 
           <FormItem
