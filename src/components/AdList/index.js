@@ -20,7 +20,7 @@ class AdList extends Component{
       return;
     }
 
-    const adlistUrl = `/api/v1/advertiser/${props.uid}`;
+    const adlistUrl = `/api/v1/advertiser/user/${props.uid}`;
 
     fetch(adlistUrl).then(res =>
       res.json()

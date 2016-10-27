@@ -61,7 +61,7 @@ let AdNewForm = React.createClass({
     if (!value) {
       callback();
     } else {
-      const url = `/api/v1/advertiser/name/${value}`;
+      const url = `/api/v1/advertiser/${this.props.uid}/name/${value}`;
       fetch(url).then(function(res){
         return res.json()
       }).then(function(data){
