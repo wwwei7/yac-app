@@ -1,9 +1,8 @@
 import React from 'react';
-import Layout from '../common/Layout';
+import Layout from '../../common/Layout';
 import {Table} from 'antd';
 import { Link } from 'react-router';
 import style from './style.less';
-import 'antd/dist/antd.css';
 
 
 const columns = [{
@@ -51,7 +50,7 @@ class solutionListPage extends React.Component {
   render() {
     return (
       <Layout current="solutionList" open="solutionManagement">
-        <h1 className="page-title"> Solution Management </h1>
+        <h1 className="page-title"> 推广计划管理 </h1>
         <Table className={this.props.hidden?'hidden':''}
               columns={columns} dataSource={data} pagination={this.paginBarVisible}/>
       </Layout>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Chart} from 'react-google-charts';
-import Layout from '../common/Layout';
+import Layout from '../../common/Layout';
 import style from './style.less';
 import 'antd/dist/antd.css';
 

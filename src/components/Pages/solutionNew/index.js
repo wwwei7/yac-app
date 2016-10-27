@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Form, Input, Select ,DatePicker, InputNumber, 
   Radio, Card} from 'antd';
-import Layout from '../common/Layout';
+import Layout from '../../common/Layout';
 import style from './style.less';
-import Region from '../Region';
+import Region from '../../Region';
 
 const createForm = Form.create;
 const FormItem = Form.Item;

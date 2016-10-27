@@ -3,13 +3,13 @@ import { Router, Route, hashHistory, Redirect, IndexRedirect } from 'react-route
 
 import auth from './auth'
 
-import homePage from '../components/homePage';
-import reportMediaPage from '../components/reportMediaPage';
-import solutionListPage from '../components/solutionListPage';
-import solutionNewPage from '../components/solutionNewPage';
-import budgetPage from '../components/pages/Budget';
-import adInfoPage from '../components/pages/AdInfo';
-import financePage from '../components/pages/Finance';
+import homePage from '../components/Pages/home';
+import reportMediaPage from '../components/Pages/reportMedia';
+import solutionListPage from '../components/Pages/solutionList';
+import solutionNewPage from '../components/Pages/solutionNew';
+import budgetPage from '../components/Pages/Budget';
+import adInfoPage from '../components/Pages/AdInfo';
+import financePage from '../components/Pages/Finance';
 
 
 class Routes extends Component{
@@ -35,7 +35,6 @@ class Routes extends Component{
                 <Route path="solution" component={solutionNewPage} ></Route>    
                 <Route path="solution/:id" component={solutionNewPage} ></Route>                                       
                 <Route path="solutionlist" component={solutionListPage} ></Route>
-                <Route path="advertiser/:id" component={solutionListPage}></Route>
                 <Route path="budget" component={budgetPage} ></Route>
                 <Route path="adinfo" component={adInfoPage} ></Route>    
                 <Route path="finance" component={financePage} ></Route>                                                                                                                                                          

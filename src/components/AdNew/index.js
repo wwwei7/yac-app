@@ -12,8 +12,7 @@ let AdNewForm = React.createClass({
     };
   },
 
-  handleReset(e) {
-    e.preventDefault();
+  handleReset() {
     this.props.form.resetFields();
   },
 
@@ -39,8 +38,6 @@ let AdNewForm = React.createClass({
         website: values.website,
         landing_white: values.whiteList
       };
-    
-    let self = this;
 
     this.state.loading = true;
 
@@ -51,12 +48,12 @@ let AdNewForm = React.createClass({
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(postBody)
-    }).then(function(res){
+    }).then(res => {
       if(res.ok){
-        self.saveSuccess();
+        this.saveSuccess();
       }
     }, function(err){
-
+      console.log(err)
     })
   },
 
@@ -64,29 +61,28 @@ let AdNewForm = React.createClass({
     if (!value) {
       callback();
     } else {
-      const url = '/api/v1/advertiser/name/' + value;
+      const url = `/api/v1/advertiser/name/${value}`;
       fetch(url).then(function(res){
-        var a;
         return res.json()
       }).then(function(data){
         if(!data.name){
           callback()
         }else{
-          callback([new Error('对不起，名称 '+value+ ' 已经存在')])
+          callback([new Error(`对不起，名称 ${value} 已经存在`)])
         }
       },function(err){
-
+        console.log(err)
       })
     }
   },
 
   saveSuccess(){
     this.setState({loading:false});
-    const self = this;
     const modal = Modal.success({
       title: '保存成功',
-      onOk: function(){
-        window.location.hash = 'advertiser/1'
+      onOk: ()=>{
+        this.handleReset();
+        this.props.changeTab('list')
       }
     });
 
@@ -150,7 +146,7 @@ let AdNewForm = React.createClass({
               { max: 12, message: '请勿超过12个字符'}
             ]
           })(
-            <Input type="tel"/>
+            <Input type="number"/>
           )}
         </FormItem>
 

@@ -14,23 +14,16 @@ class Header extends React.Component{
     const roleMap = {
       'agency': '代理商用户'
     }
-    // setTimeout(()=>{
-    //   self.setState({
-    //     name: self.props.user.name,
-    //     role: self.props.user.role,
-    //     roleName: roleMap[self.props.user.role]
-    //   })
-    // },300)
   }
 
   logout(){
      Modal.confirm({
       title: '是否退出当前账户',
       onOk() {
-        // fetch('/action/logout',{
-        //   credentials: 'include',
-        //   method: 'GET'
-        // })
+        fetch('/action/logout',{
+          credentials: 'include',
+          method: 'GET'
+        })
       },
       onCancel() {},
     });

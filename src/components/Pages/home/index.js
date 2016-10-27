@@ -1,8 +1,8 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
-import Header from '../common/Header';
-import AdList from '../AdList';
-import AdNew from '../AdNew';
+import Header from '../../common/Header';
+import AdList from '../../AdList';
+import AdNew from '../../AdNew';
 import style from './style.less';
 import 'antd/dist/antd.css';
 
@@ -28,6 +28,12 @@ class homePage extends React.Component {
     })
   }
 
+  changeTab(val){
+    this.setState({
+      current: val
+    })
+  }
+
   render() {
     return (
       <div className="wrap">
@@ -44,8 +50,8 @@ class homePage extends React.Component {
           </Menu>
      
           <div className="panel">
-            <AdList hidden={this.state.current != "list"} uid={this.state.user.uid}/>   
-            <AdNew hidden={this.state.current != "new"} uid={this.state.user.uid}/>
+            <AdList changeTab={this.changeTab.bind(this)} hidden={this.state.current != "list"} uid={this.state.user.uid}/>   
+            <AdNew changeTab={this.changeTab.bind(this)} hidden={this.state.current != "new"} uid={this.state.user.uid}/>
           </div>
         </div>
       </div>
