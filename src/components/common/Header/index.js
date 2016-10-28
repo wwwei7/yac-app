@@ -20,6 +20,7 @@ class Header extends React.Component{
      Modal.confirm({
       title: '是否退出当前账户',
       onOk() {
+        window.location = '/';
         fetch('/action/logout',{
           credentials: 'include',
           method: 'GET'

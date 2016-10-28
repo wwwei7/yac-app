@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Select ,DatePicker, InputNumber, 
+import { Button, Form, Input, Select, DatePicker, InputNumber, 
   Radio, Card} from 'antd';
 import Layout from '../../common/Layout';
 import style from './style.less';
@@ -16,12 +16,6 @@ let SolutionPage = React.createClass({
       value: 1,
     };
   },
-  onChange(e) {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-    });
-  },
 
   handleReset(e) {
     e.preventDefault();
@@ -37,10 +31,11 @@ let SolutionPage = React.createClass({
       }
       console.log('Submit!!!');
       console.log(values);
+      this.postForm(values);
     });
   },
 
-  userExists(rule, value, callback) {
+  nameExists(rule, value, callback) {
     if (!value) {
       callback();
     } else {
@@ -54,21 +49,28 @@ let SolutionPage = React.createClass({
     }
   },
 
-  checkPass(rule, value, callback) {
-    const { validateFields } = this.props.form;
-    if (value) {
-      validateFields(['rePasswd'], { force: true });
-    }
-    callback();
+  setRegion(val){
+    this.props.form.setFieldsValue({
+      region: val
+    })
   },
 
-  checkPass2(rule, value, callback) {
-    const { getFieldValue } = this.props.form;
-    if (value && value !== getFieldValue('passwd')) {
-      callback('两次输入密码不一致！');
-    } else {
-      callback();
-    }
+  postForm(values){
+    const postUrl = '/api/v1/solution';
+
+    const postBody = {
+        advertiser_id: this.props.aid,
+        solution_name: values.name,
+        region: values.region,
+        adx: 'baidu',
+        start_time: values.start.format("YYYY-MM-DD HH:mm:ss"),
+        end_time: values.end.format("YYYY-MM-DD HH:mm:ss"),
+        budget: values.budget,
+        price: values.price
+      };
+
+    console.log(postBody)
+    this.state.loading = true;
   },
 
   render() {
@@ -90,7 +92,7 @@ let SolutionPage = React.createClass({
             {getFieldDecorator('name', {
               rules: [
                 { required: true, min: 5, max: 16, message: '推广计划名称长度范围需要在3~16个字符之间' },
-                { validator: this.userExists },
+                { validator: this.nameExists },
               ],
             })(
               <Input />
@@ -102,7 +104,10 @@ let SolutionPage = React.createClass({
             label="开始时间"
             hasFeedback
           >
-            <DatePicker></DatePicker>
+            {getFieldDecorator('start', {
+            })(
+              <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"></DatePicker>
+            )}
           </FormItem>
 
           <FormItem
@@ -110,25 +115,30 @@ let SolutionPage = React.createClass({
             label="结束时间"
             hasFeedback
           >
-            <DatePicker></DatePicker>
+            {getFieldDecorator('end', {
+            })(
+              <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"></DatePicker>
+            )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="出价设置"
           >
+            {getFieldDecorator('price')(
             <InputNumber min={0} max={10000} step={0.01} />
+            )}
           </FormItem>
 
-          <div className="ant-row ant-form-item region">
-            <div className="ant-col-5 ant-form-item-label">
-            <label className="">地域</label></div>
-            <div className="ant-col-12">
-              <div className="ant-form-item-control ">
-              <Region></Region>
-              </div>
-            </div>
-          </div>
+          <FormItem
+            {...formItemLayout}
+            label="地域"
+            className="region"
+          >
+            {getFieldDecorator('region')(
+              <Region setRegion={this.setRegion}></Region>
+            )}
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -144,14 +154,18 @@ let SolutionPage = React.createClass({
             {...formItemLayout}
             label="媒体范围"
           >
-            <Input type="textarea" placeholder="请输入域名使用分号；分隔"/>
+            {getFieldDecorator('media')(
+              <Input type="textarea" placeholder="请输入域名使用分号；分隔"/>
+            )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="日预算上限设置"
           >
-            <InputNumber min={0} max={10000} step={1} />
+            {getFieldDecorator('budget')(
+              <InputNumber min={0} max={10000} step={1} />
+            )}
           </FormItem>
 
           <FormItem wrapperCol={{ span: 12, offset: 7 }}>
