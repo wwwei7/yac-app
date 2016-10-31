@@ -3,6 +3,7 @@ import { Card } from 'antd';
 import { Link } from 'react-router'; 
 import classNames from 'classnames';
 import style from './style.less';
+import store from '../../js/store'
 
 
 class AdList extends Component{
@@ -25,14 +26,17 @@ class AdList extends Component{
     fetch(adlistUrl).then(res =>
       res.json()
     ).then(data => {
-      this.setState({
-        adList: data
-      })
+      let nodata = false;      
+       
       if(data.length<1){
-        this.setState({
-          nodata: true
-        })
+        nodata = true;
       }
+
+      this.setState({
+        adList: data,
+        nodata: nodata
+      })
+
     },function(err){
       console.log(err)
     })
@@ -46,6 +50,10 @@ class AdList extends Component{
     this.props.changeTab('new');
   }
 
+  setAdvertiser(e){
+    store.setAdvertiser(this.state);
+  }
+
   render(){
     let nodataClass = classNames({
       'nodata' : true,
@@ -53,11 +61,11 @@ class AdList extends Component{
     })
     return(
         <div className={'adlist'+this.getVisible()}>
-          {this.state.adList.map(function(ad, index){
+          {this.state.adList.map((ad, index) => {
             return (
               <Card className="adlist-item" 
                 title={ad.name} key={index} 
-                extra = {<Link to='solutionlist/'>进入更多操作</Link>} 
+                extra = {<Link to={`/${ad.id}/solutionlist/`} state={ad} onClick={this.setAdvertiser}>进入更多操作</Link>} 
                 >
                 <p>联系人：{ad.contacter?ad.contacter:'(未设置)'}</p>
               </Card>

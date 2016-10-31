@@ -2,18 +2,25 @@ import React from 'react';
 import { Icon, Modal } from 'antd';
 import { Link } from 'react-router'; 
 import style from './style.less';
+import store from '../../../js/store'
+
+const roleMap = {
+  'agency': '代理商用户'
+}
 
 class Header extends React.Component{
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+      user: {}
+    };
   }
 
   componentDidMount(){
-    let self = this;
-    const roleMap = {
-      'agency': '代理商用户'
-    }
+    this.setState({
+      user: store.getUser()
+    })
+    // this.user = store.getUser();
   }
 
   logout(){
@@ -36,8 +43,8 @@ class Header extends React.Component{
         <div className="container clearfix">
           <Link className="header-logo" to='/home'>Your Ad Cloud</Link>
           <div className="header-user">
-            <span>欢迎：{this.props.user?this.props.user.name:''}</span>
-            <span>{this.props.user?this.props.user.role:''}</span>            
+            <span>欢迎：{this.state.user.name}</span>
+            <span>{roleMap[this.state.user.role]}</span>            
             <span className="header-logout" onClick={this.logout}><Icon type="logout" />注销</span>
           </div>
         </div>

@@ -31,10 +31,9 @@ class Routes extends Component{
                     <IndexRedirect to="home" />
                 </Route>
                 <Route path="home" component={homePage} onEnter={auth}></Route>
-                <Route path="reportmedia" component={reportMediaPage} ></Route>
-                <Route path="solution" component={solutionNewPage} ></Route>    
-                <Route path="solution/:id" component={solutionNewPage} ></Route>                                       
-                <Route path="solutionlist" component={solutionListPage} ></Route>
+                <Route path="/:aid/reportmedia" component={reportMediaPage} ></Route>
+                <Route path="/:aid/solution" component={solutionNewPage} onEnter={auth}></Route>                               
+                <Route path="/:aid/solutionlist" component={solutionListPage} ></Route>
                 <Route path="budget" component={budgetPage} ></Route>
                 <Route path="adinfo" component={adInfoPage} ></Route>    
                 <Route path="finance" component={financePage} ></Route>                                                                                                                                                          

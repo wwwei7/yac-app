@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Select, DatePicker, InputNumber, 
-  Radio, Card} from 'antd';
+  Radio, Card, Spin, Modal} from 'antd';
 import Layout from '../../common/Layout';
 import style from './style.less';
 import Region from '../../Region';
@@ -13,12 +13,11 @@ const RadioGroup = Radio.RadioGroup;
 let SolutionPage = React.createClass({
   getInitialState() {
     return {
-      value: 1,
+      loading: false
     };
   },
 
-  handleReset(e) {
-    e.preventDefault();
+  handleReset() {
     this.props.form.resetFields();
   },
 
@@ -39,27 +38,36 @@ let SolutionPage = React.createClass({
     if (!value) {
       callback();
     } else {
-      setTimeout(() => {
-        if (value === 'JasonWood') {
-          callback([new Error('抱歉，该用户名已被占用。')]);
-        } else {
-          callback();
+      const url = `/api/v1/solution/${this.props.params.aid}/name/${value}`;
+      fetch(url).then(function(res){
+        return res.json()
+      }).then(function(data){
+        if(!data.solution_name){
+          callback()
+        }else{
+          callback([new Error(`对不起，名称 ${value} 已经存在`)])
         }
-      }, 800);
+      },function(err){
+        console.log(err)
+      })
     }
   },
 
   setRegion(val){
     this.props.form.setFieldsValue({
-      region: val
+      region: JSON.stringify(val)
     })
+  },
+
+  disabledStartDate(val){
+    //TODO
   },
 
   postForm(values){
     const postUrl = '/api/v1/solution';
 
     const postBody = {
-        advertiser_id: this.props.aid,
+        advertiser_id: this.props.params.aid,
         solution_name: values.name,
         region: values.region,
         adx: 'baidu',
@@ -69,8 +77,33 @@ let SolutionPage = React.createClass({
         price: values.price
       };
 
-    console.log(postBody)
+    fetch(postUrl,{
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postBody)
+    }).then(res => {
+      if(res.ok){
+        this.saveSuccess();
+      }
+    }, function(err){
+      console.log(err)
+    })
+
     this.state.loading = true;
+  },
+
+  saveSuccess(){
+    this.state.loading = false;
+    const modal = Modal.success({
+      title: '保存成功',
+      onOk: ()=>{
+        this.handleReset();
+        location.hash = `/${this.props.params.aid}/solutionlist`
+      }
+    });
   },
 
   render() {
@@ -84,10 +117,14 @@ let SolutionPage = React.createClass({
     return (
       <Layout current='solutionNew' open='solutionManagement' className="solutionnew">
         <h1 className="page-title">新增推广计划</h1>
+        <Spin tip="正在存储...." size="large"
+          spinning={this.state.loading}>
         <Form horizontal className={this.props.hidden?'adnew-form hidden':'adnew-form'}>
           <FormItem
             {...formItemLayout}
             label="推广计划名称"
+            hasFeedback
+            help={isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')}
           >
             {getFieldDecorator('name', {
               rules: [
@@ -102,22 +139,28 @@ let SolutionPage = React.createClass({
           <FormItem
             {...formItemLayout}
             label="开始时间"
-            hasFeedback
           >
             {getFieldDecorator('start', {
+              rules: [
+                { required: true }
+              ]
             })(
-              <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"></DatePicker>
+              <DatePicker showTime
+                format="YYYY-MM-DD HH:mm:ss"></DatePicker>
             )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="结束时间"
-            hasFeedback
           >
             {getFieldDecorator('end', {
+              rules: [
+                { required: true }
+              ]
             })(
-              <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"></DatePicker>
+              <DatePicker showTime
+                format="YYYY-MM-DD HH:mm:ss"></DatePicker>
             )}
           </FormItem>
 
@@ -174,6 +217,7 @@ let SolutionPage = React.createClass({
             <Button type="ghost" onClick={this.handleReset}>重置</Button>
           </FormItem>
         </Form>
+        </Spin>
       </Layout>
 
     );

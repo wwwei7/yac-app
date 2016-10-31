@@ -8,32 +8,16 @@ import style from './style.less';
 
 const columns = [{
   title: '名称',
-  render: record => <Link to={'/advertiser/'+record.key}>{record.name}</Link>,
+  render: record => <Link to={'/solution/'+record.key}>{record.name}</Link>,
+}, {
+  title: '开始时间',
+  dataIndex: 'start',
 }, {
   title: '结束时间',
-  dataIndex: 'type',
-}, {
-  title: '出价',
-  dataIndex: 'status',
+  dataIndex: 'end',
 }, {
   title: '日预算',
-  dataIndex: 'company',
-}];
-const data = [{
-  key: '1',
-  name: '梅赛德斯',
-  age: 32,
-  address: '西湖区湖底公园1号',
-}, {
-  key: '2',
-  name: '西门子',
-  age: 42,
-  address: '西湖区湖底公园1号',
-}, {
-  key: '3',
-  name: '三菱',
-  age: 32,
-  address: '西湖区湖底公园1号',
+  dataIndex: 'budget',
 }];
 
 
@@ -41,18 +25,54 @@ class solutionListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      tableData: [],
       nodata: false
     };
 
-    this.paginBarVisible = data.length> 15;
+    this.paginBarVisible = this.state.tableData.length> 15;
   }
 
-  componentDidMount(){
+  componentWillMount(){
+    const postUrl = `/api/v1/solution/ad/${this.props.params.aid}`;
 
+    fetch(postUrl).then(res =>
+      res.json()
+    ).then(data => {
+      let nodata = false;      
+       
+      if(data.length<1){
+        nodata = true;
+      }
+
+      let tableData = this.tableDataFilter(data);
+
+      this.setState({
+        tableData: this.tableDataFilter(data),
+        nodata: nodata
+      })
+
+    },function(err){
+      console.log(err)
+    })
+  }
+
+  tableDataFilter(data){
+    let table = [];
+    data.map(item => {
+      table.push({
+        name: item.solution_name,
+        start: item.start_time.split('.')[0].replace('T',' '),        
+        end: item.end_time.split('.')[0].replace('T',' '),
+        price: item.price,
+        budget: item.budget
+      })
+    })
+
+    return table;
   }
 
   goNew(){
-    window.location.hash = '/solution'
+    window.location.hash = `/${this.props.params.aid}/solution`
   }
 
   render() {
@@ -65,13 +85,15 @@ class solutionListPage extends React.Component {
       <Layout current="solutionList" open="solutionManagement">
         <h1 className="page-title"> 推广计划管理 </h1>
 
-        <Table className={this.props.hidden?'hidden':''}
-              columns={columns} dataSource={data} pagination={this.paginBarVisible}/>
-
         <div className={nodataClass}>
           <h2>当前广告主暂无推广计划</h2>
-          <h1>请先<a data-goto="new" onClick={this.goNew}>前往新增推广计划</a></h1>
+          <h1>请先<a data-goto="new" onClick={this.goNew.bind(this)}>前往新增推广计划</a></h1>
         </div>
+
+        <Table className={this.props.hidden?'hidden':''}
+              columns={columns} dataSource={this.state.tableData} pagination={this.paginBarVisible}/>
+
+        
       </Layout>
     );
   }

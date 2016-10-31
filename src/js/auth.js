@@ -1,4 +1,4 @@
-
+import store from './store'
 
 const auth = function(nextState, replace, next){
     
@@ -10,8 +10,8 @@ const auth = function(nextState, replace, next){
     }).then(function(data){
         console.log(data);
         if(data.user){
-            // set user object to next component
-            nextState.routes[0].user = data.user;
+            // set user object to store
+            store.setUser(data.user);
             next();
         }else{
             // alert('need login')

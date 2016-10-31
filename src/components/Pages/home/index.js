@@ -4,6 +4,7 @@ import Header from '../../common/Header';
 import AdList from '../../AdList';
 import AdNew from '../../AdNew';
 import style from './style.less';
+import store from '../../../js/store'
 import 'antd/dist/antd.css';
 
 
@@ -18,7 +19,7 @@ class homePage extends React.Component {
 
   componentDidMount(){
     this.setState({
-      user: this.props.route.user
+      user: store.getUser()
     })
   }
 
@@ -37,7 +38,7 @@ class homePage extends React.Component {
   render() {
     return (
       <div className="wrap">
-        <Header user={this.state.user}/>
+        <Header/>
         <div className="main-container">
           <Menu mode="horizontal" 
             onClick={this.onMenuClick.bind(this)} selectedKeys={[this.state.current]}>
