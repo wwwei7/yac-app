@@ -18,7 +18,7 @@ class Layout extends React.Component {
       <div className="wrap">
         <Header />
         <SiderBar current={this.props.current} open={this.props.open} />
-        <div className={this.props.current.toLowerCase()+" content"}>
+        <div className={(this.props.className || this.props.current.toLowerCase())+" content"}>
           {this.props.children}
         </div>
       </div>

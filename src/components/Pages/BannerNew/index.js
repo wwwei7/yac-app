@@ -36,7 +36,10 @@ class solutionListPage extends React.Component {
     this.fileUp = {
       name: 'file',
       showUploadList: false,
-      action: '/upload.do',
+      action: '/action/upload',
+      beforeUpload(arg) {
+        console.log(arg)
+      },
       onChange(info) {
         if (info.file.status !== 'uploading') {
           console.log(info.file, info.fileList);

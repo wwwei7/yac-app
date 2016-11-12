@@ -35,11 +35,11 @@ class Region extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 'all',
-      value: '',
-      cityValue: [],
-      ipValue: ''
     };
+    this.type = 1;
+    // 初始化城市选择框和ip输入框
+    this.cityValue = [];
+    this.ipValue = '';
   }
 
   // 监听radio onchagne
@@ -47,71 +47,80 @@ class Region extends React.Component {
     let type = e.target.value;
     let inputValue = '';
     switch(type){
-      case 'all':
+      case 1:
         inputValue = '';
         break;
-      case 'city':
-        inputValue = this.state.cityValue;
+      case 2:
+        inputValue = this.cityValue;
         break;
-      case 'ip':
-        inputValue = this.state.ipValue;
+      case 3:
+        inputValue = this.ipValue;
         break;
     }
-    this.setState({
-      type: type,
-      value: inputValue
-    })
+    this.type = type;
     this.popValue(type, inputValue)
   }
 
   // 监听子选项输入框 onchange
   inputOnChange(e){
     let value = '';
-    switch(this.state.type){
-      case 'all':
+    switch(this.type){
+      case 1:
         break;
-      case 'city':
+      case 2:
         value = e;
-        this.setState({
-          value: value,
-          cityValue: e
-        })
+        this.cityValue = value;
         break;
-      case 'ip':
+      case 3:
         value = e.target.value;
-        this.setState({
-          value: value,
-          ipValue: value
-        })
+        this.ipValue = value;
         break;
     }
-    this.popValue(this.state.type, value)
+    this.popValue(this.type, value)
   }
 
   // 更新父表单元素值
   popValue(type,value){
-    value = (type == 'city'? value.join(',') : value);
+    value = (type == 2 && value.join? value.join(',') : value);
     this.props.setRegion({
       type: type,
       value: value
     });
   }
 
+  getInputValue(type){
+    //先从当前缓存里取值
+    switch(type){
+      case 2:
+        this.cityValue = this.cityValue.length>0? this.cityValue : this.props.value.value;
+        return this.cityValue;
+      case 3:
+        this.ipValue =  this.ipValue || this.props.value.value;
+        return this.ipValue;
+    }
+  }
+
   render() {
+    const type = this.props.value.type;
+    const cityValue = this.getInputValue(type)
+    const ipValue = this.getInputValue(type)
+
+    this.type =  type;
+
     return (
-      <RadioGroup onChange={this.radioOnChange.bind(this)} value={this.state.type} className="region-group">
-        <Radio className="radio-item" key="r1" value={"all"}>无地域定向（全网）</Radio>
-        <Radio className="radio-item" key="r2" value={"city"}>选择城市定向</Radio>
-        <div className={this.state.type=="city" ? 'city' : 'hidden'}>
+      <RadioGroup onChange={this.radioOnChange.bind(this)} value={type} className="region-group">
+        <Radio className="radio-item" key="r1" value={1}>无地域定向（全网）</Radio>
+        <Radio className="radio-item" key="r2" value={2}>选择城市定向</Radio>
+        <div className={type==2 ? 'city' : 'hidden'}>
           <Cascader ref="cityInput" size="large" options={cityOptions} 
-            value={this.state.cityValue}
+            value={cityValue}
             onChange={this.inputOnChange.bind(this)} changeOnSelect />
         </div>
         
-        <Radio className="radio-item" key="r3" value={"ip"}>自定义IP地域库</Radio>
-        <div className={this.state.type=='ip' ? 'ip' : 'hidden'}>
+        <Radio className="radio-item" key="r3" value={3}>自定义IP地域库</Radio>
+        <div className={type==3 ? 'ip' : 'hidden'}>
             <Input ref="ipInput" type="textarea" placeholder="请使用分号（；）分隔" 
-            value={this.state.ipValue}
+            value={ipValue}
             onChange={this.inputOnChange.bind(this)} />
         </div>
       </RadioGroup>

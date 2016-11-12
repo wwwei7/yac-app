@@ -8,7 +8,7 @@ import style from './style.less';
 
 const columns = [{
   title: '名称',
-  render: record => <Link to={'/solution/'+record.key}>{record.name}</Link>,
+  render: record => <Link to={'/'+record.aid+'/solution/'+record.id+'/edit'}>{record.name}</Link>,
 }, {
   title: '开始时间',
   dataIndex: 'start',
@@ -60,9 +60,11 @@ class solutionListPage extends React.Component {
     let table = [];
     data.map(item => {
       table.push({
+        id: item.id,
+        aid: item.advertiser_id,
         name: item.solution_name,
-        start: item.start_time.split('.')[0].replace('T',' '),        
-        end: item.end_time.split('.')[0].replace('T',' '),
+        start: item.start_date.split('T')[0],        
+        end: item.end_date.split('T')[0],
         price: item.price,
         budget: item.budget
       })

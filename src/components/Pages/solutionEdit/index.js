@@ -1,24 +1,49 @@
 import React from 'react';
-import { Button, Form, Input, Select, DatePicker, InputNumber, 
-  Radio, Card, Spin, Modal} from 'antd';
+import { Button, Form, Input, DatePicker, InputNumber, Card, Spin, Modal} from 'antd';
+import moment from 'moment';
+
 import Layout from '../../common/Layout';
 import style from './style.less';
 import Region from '../../Region';
 
+
 const createForm = Form.create;
 const FormItem = Form.Item;
-const RadioGroup = Radio.RadioGroup;
 
 
 let SolutionPage = React.createClass({
   getInitialState() {
     return {
-      loading: false
+      loading: true,
+      loadingTips: '加载中...',
+      id: '',
+      region: {}
     };
   },
 
   handleReset() {
     this.props.form.resetFields();
+  },
+
+  componentDidMount(){
+    this.id = this.props.params.sid;
+    const url = `/api/v1/solution/${this.id}`;
+    fetch(url).then((res)=>{
+      return res.json();
+    }).then(data=>{
+      console.log(data);
+      this.setState({
+        loading: false
+      })
+      let initData = this.presetData(data);
+      this.props.form.setFieldsValue(initData);
+      // if(data.region)
+        this.setState({
+          region: initData.region
+        })
+    }, err=>{
+      alert('Read solution error')
+    })
   },
 
   handleSubmit(e) {
@@ -34,23 +59,28 @@ let SolutionPage = React.createClass({
     });
   },
 
-  nameExists(rule, value, callback) {
-    if (!value) {
-      callback();
-    } else {
-      const url = `/api/v1/solution/${this.props.params.aid}/name/${value}`;
-      fetch(url).then(function(res){
-        return res.json()
-      }).then(function(data){
-        if(!data.solution_name){
-          callback()
-        }else{
-          callback([new Error(`对不起，名称 ${value} 已经存在`)])
-        }
-      },function(err){
-        console.log(err)
-      })
+  presetData(data){
+    let initData = {
+      name: data.solution_name,
+      start: moment(data.start_date,'YYYY-MM-DD'),
+      end: moment(data.end_date,'YYYY-MM-DD'),
+      region: this.presetRegion(data.region_type, data.region_value),
+      price: data.price,
+      media: data.media,
+      budget: data.budget
     }
+    return initData;
+  },
+
+  presetRegion(type,value) {
+    let region = {};
+    region.type = type;
+    if(type==2){
+      region.value = value.split(',')
+    }else{
+      region.value = value;
+    }
+    return region;
   },
 
   setRegion(val){
@@ -64,18 +94,18 @@ let SolutionPage = React.createClass({
   },
 
   postForm(values){
-    const postUrl = '/api/v1/solution';
+    const postUrl = '/api/v1/solution/'+ this.id;
 
     const postBody = {
         advertiser_id: this.props.params.aid,
         solution_name: values.name,
-        region_type: values.region.type,
-        region_value: values.region.value,
+        region: values.region,
         adx: 'baidu',
-        start: values.start.format("YYYY-MM-DD"),
-        end: values.end.format("YYYY-MM-DD"),
+        start_date: values.start,
+        end_date: values.end,
         budget: values.budget,
-        price: values.price
+        price: values.price,
+        media: values.media
       };
 
     fetch(postUrl,{
@@ -93,11 +123,15 @@ let SolutionPage = React.createClass({
       console.log(err)
     })
 
-    this.state.loading = true;
+    this.setState({
+      loading: true
+    })
   },
 
   saveSuccess(){
-    this.state.loading = false;
+    this.setState({
+      loading: false
+    })
     const modal = Modal.success({
       title: '保存成功',
       onOk: ()=>{
@@ -116,16 +150,15 @@ let SolutionPage = React.createClass({
     };
 
     return (
-      <Layout current='solutionNew' open='solutionManagement'>
-        <h1 className="page-title">新增推广计划</h1>
-        <Spin tip="正在存储...." size="large"
+      <Layout current='solutionList' open='solutionManagement' className='solution-edit'>
+        <h1 className="page-title">编辑推广计划</h1>
+        <Spin tip={this.state.loadingTips} size="large"
           spinning={this.state.loading}>
         <Form horizontal className={this.props.hidden?'hidden':''}>
           <FormItem
             {...formItemLayout}
             label="推广计划名称"
-            hasFeedback
-            help={isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')}
+            disabled="true"
           >
             {getFieldDecorator('name', {
               rules: [
@@ -133,7 +166,7 @@ let SolutionPage = React.createClass({
                 { validator: this.nameExists },
               ],
             })(
-              <Input />
+              <Input disabled/>
             )}
           </FormItem>
         
@@ -180,8 +213,10 @@ let SolutionPage = React.createClass({
             {getFieldDecorator('region',{
               initialValue: {type:1,value:''}
             })(
-              <Region setRegion={this.setRegion}></Region>
+          
+              <Region setRegion={this.setRegion} val={this.state.region} type={this.state.region.type}></Region>
             )}
+         
           </FormItem>
 
           <FormItem
