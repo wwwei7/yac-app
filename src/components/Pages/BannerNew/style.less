@@ -2,12 +2,26 @@
   .steps{
     width: 85%;
   }
-  .sizelist{
+  .stepct{
+    .subtitle, .sizetitle{
+      margin: 40px 0;
+      font-size: 17px;
+      b{
+        color: #2db7f5;
+        margin-right: 40px;
+      }
+    }
+    .sizetitle{
+      margin: 0;
+    }
+  }
+  .solutionlist{
     overflow: hidden;
-    margin: 40px 0;
+    margin: 10px 0;
     li{
       float: left;
-      width: 110px;
+      min-width: 110px;
+      padding: 0 10px;
       height: 40px;
       text-align: center;
       line-height: 40px;
@@ -25,6 +39,18 @@
         border-color: #2db7f5;        
         font-weight: bold;
       }
+    }
+  }
+
+  .sizelist{
+    overflow: hidden;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    li{
+      float: left;
+      margin: 3px 5px;
+      padding: 5px 10px;
+      border: 1px solid;
     }
   }
 

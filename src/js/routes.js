@@ -40,7 +40,7 @@ class Routes extends Component{
                 <Route path="budget" component={budgetPage} onEnter={auth}></Route>
                 <Route path="adinfo" component={adInfoPage} onEnter={auth}></Route>    
                 <Route path="finance" component={financePage} onEnter={auth}></Route>
-                <Route path="bannernew" component={bannerPage} onEnter={auth}></Route>                                                                                                                                                          
+                <Route path="/:aid/bannernew" component={bannerPage} onEnter={auth}></Route>                                                                                                                                                          
             </Router>
         )
     }
