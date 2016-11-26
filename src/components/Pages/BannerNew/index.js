@@ -1,14 +1,12 @@
 import React from 'react';
 import Layout from '../../common/Layout';
-import { Link } from 'react-router';
-import { Steps, Upload, Icon, message, Button, Alert, Spin } from 'antd';
+import { Steps, Upload, Icon, Modal, Button, Alert, Spin } from 'antd';
 import classNames from 'classnames';
 import style from './style.less';
 
 const Step = Steps.Step;
 const Dragger = Upload.Dragger;
-
-const sizeList = ['200x200', '250x250', '320x250', '320x320', '640x180', '640x320'];
+const sizeList = ['336x280', '300x250', '960x90', '728x90', '250x250', '120x240'];
 
 
 class solutionListPage extends React.Component {
@@ -29,8 +27,8 @@ class solutionListPage extends React.Component {
     this.fileUp = {
       showUploadList: false,
       action: '/action/upload',
-      accept: ".jpg,.png,.gif",
-      beforeUpload(arg) {
+      accept: '.jpg,.png,.gif',
+      beforeUpload() {
         //传递推广组id
         this.data.sid = self.sid;
         self.setState({
@@ -42,14 +40,16 @@ class solutionListPage extends React.Component {
           console.log(info.file, info.fileList);
         }
         if (info.file.status === 'done') {
-          // message.success(`${info.file.name} 文件上传成功`);
           self.setState({
             step: 2,
             img: info.file.response,
             uploading: false
           })
         } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} 文件上传失败`);
+          Modal.error({
+            title: `${info.file.name} 文件上传失败`,
+            content: info.file.response.msg,
+          });
           self.setState({
             uploading: false
           })
@@ -125,7 +125,13 @@ class solutionListPage extends React.Component {
         </Steps>
 
         <div className={step1Class}>
-          <p className="subtitle">请先选择素材将要添加的推广组</p>
+          <p className="subtitle">
+            {
+              this.state.nodata ?
+              '当前广告主还未建立推广组，请先新增推广组' :
+              '请先选择素材将要添加的推广组'
+            }        
+          </p>
           <ul className="solutionlist">
             {
               this.state.solutionList.map((sul, i) => {
@@ -170,15 +176,17 @@ class solutionListPage extends React.Component {
         <div className={step3Class}>
           <div className="title">
             <Alert 
-              message="图片成功上传"
-              description={`宽度: ${this.state.img.width} 高度: ${this.state.img.height}`}
+              message="图片上传成功"
+              description={`宽度: ${this.state.img.width}px 高度: ${this.state.img.height}px`}
               type="success"
               showIcon
               />
           </div>
 
           <div className="imgct">
-            <img src={this.state.img.url} />
+            <img width={this.state.img.width} 
+              height={this.state.img.height}
+              src={this.state.img.url} />
           </div>
 
           <div className="opts">
