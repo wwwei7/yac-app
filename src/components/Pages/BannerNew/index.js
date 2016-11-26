@@ -1,7 +1,8 @@
 import React from 'react';
 import Layout from '../../common/Layout';
-import { Steps, Upload, Icon, Modal, Button, Alert, Spin } from 'antd';
+import { Steps, Upload, Icon, Modal, Button, Alert, Spin, Input, message } from 'antd';
 import classNames from 'classnames';
+import Store from '../../../js/store';
 import style from './style.less';
 
 const Step = Steps.Step;
@@ -86,6 +87,40 @@ class solutionListPage extends React.Component {
 
   toStep2(){
     this.setState({step: 1})        
+  }
+
+  save(){
+    const name= this.refs.bannerName.refs.input.value || this.state.img.name;
+    const link= this.refs.bannerLocation.refs.input.value;
+    const memo= this.refs.bannerMemo.refs.input.value || '';
+    const image = this.state.img.url;
+    const width = this.state.img.width;
+    const height = this.state.img.height;
+    const solutionid = this.sid;
+    const advertiserid = Store.getAdvertiser().id;
+
+    const postUrl = '/api/v1/banner';
+
+    if(link.trim().length<1){
+      message.error('跳转地址不能为空', 3);
+      return false;
+    }
+
+    fetch(postUrl,{
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({name, link, memo, image, width, height, solutionid, advertiserid})
+    }).then(res => {
+      if(res.ok){
+        this.toStep2();
+      }
+    }, function(err){
+      console.log(err)
+    })
+    
   }
 
   setSolution(e){
@@ -176,7 +211,7 @@ class solutionListPage extends React.Component {
         <div className={step3Class}>
           <div className="title">
             <Alert 
-              message="图片上传成功"
+              message="图片上传成功，请继续完善下列信息"
               description={`宽度: ${this.state.img.width}px 高度: ${this.state.img.height}px`}
               type="success"
               showIcon
@@ -189,16 +224,42 @@ class solutionListPage extends React.Component {
               src={this.state.img.url} />
           </div>
 
-          <div className="opts">
-            <Button type="primary" size="large"
-              onClick={this.toStep2.bind(this)}>
-              继续上传图片<Icon type="right" />
-            </Button>
+          <div className="banner-form">
+            <div className="ant-row ant-form-item">
+              <div className="ant-col-3 ant-form-item-label">
+                <label>创意名称</label>
+              </div>
+              <div className="ant-col-10">              
+                <Input ref="bannerName" placeholder={"默认：" + this.state.img.name} />
+              </div>
+            </div>
+
+            <div className="ant-row ant-form-item">
+              <div className="ant-col-3 ant-form-item-label">
+                <label className="ant-form-item-required">跳转地址</label>
+              </div>
+              <div className="ant-col-10">              
+                <Input ref="bannerLocation" placeholder="请输入广告点击跳转URL"/>
+              </div>
+            </div>
+
+            <div className="ant-row ant-form-item">
+              <div className="ant-col-3 ant-form-item-label">
+                <label>备注</label>
+              </div>
+              <div className="ant-col-10">              
+                <Input ref="bannerMemo"  placeholder="备注或描述信息"/>
+              </div>
+            </div>
           </div>
 
+          <div className="opts">
+            <Button type="primary" size="large"
+              onClick={this.save.bind(this)}>
+              保存并继续上传图片<Icon type="right" />
+            </Button>
+          </div>
         </div>
-
-        
 
       </Layout>
     );
