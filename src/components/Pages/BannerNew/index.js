@@ -9,7 +9,6 @@ const Step = Steps.Step;
 const Dragger = Upload.Dragger;
 const sizeList = ['336x280', '300x250', '960x90', '728x90', '250x250', '120x240'];
 
-
 class solutionListPage extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +21,8 @@ class solutionListPage extends React.Component {
       solutionList: [],
       curSul: '',
       nodata: false,
-      uploading: false
+      uploading: false,
+      uploading3: false
     };
 
     this.fileUp = {
@@ -106,6 +106,10 @@ class solutionListPage extends React.Component {
       return false;
     }
 
+    this.setState({
+      uploading3: true
+    })
+
     fetch(postUrl,{
       method: 'post',
       headers: {
@@ -115,7 +119,22 @@ class solutionListPage extends React.Component {
       body: JSON.stringify({name, link, memo, image, width, height, solutionid, advertiserid})
     }).then(res => {
       if(res.ok){
-        this.toStep2();
+        this.setState({
+          uploading3: false
+        });
+        this.refs.bannerName.refs.input.value = '';
+        this.refs.bannerLocation.refs.input.value = '';
+        this.refs.bannerMemo.refs.input.value = '';
+
+        const self = this;
+
+        Modal.success({
+          title: `创意素材：${name} 保存成功！`,
+          okText: '继续上传创意素材',
+          onOk() {
+            self.toStep2();
+          },
+        });
       }
     }, function(err){
       console.log(err)
@@ -180,7 +199,7 @@ class solutionListPage extends React.Component {
 
         <div className={step2Class}>
           <Spin spinning={this.state.uploading}
-            tip="正在上传图片..."
+            tip='正在上传图片...'
             >
           <p className="subtitle">当前素材将会添加至推广组：<b>{this.state.curSul}</b>
              <Button type="ghost" icon="rollback" onClick={this.toStep1.bind(this)}>重选推广组</Button>
@@ -209,22 +228,25 @@ class solutionListPage extends React.Component {
         </div>
 
         <div className={step3Class}>
-          <div className="title">
+          <Spin spinning={this.state.uploading3}
+            tip='正在保存...'
+            >
+          <section className="title">
             <Alert 
               message="图片上传成功，请继续完善下列信息"
               description={`宽度: ${this.state.img.width}px 高度: ${this.state.img.height}px`}
               type="success"
               showIcon
               />
-          </div>
+          </section>
 
-          <div className="imgct">
+          <section className="imgct">
             <img width={this.state.img.width} 
               height={this.state.img.height}
               src={this.state.img.url} />
-          </div>
+          </section>
 
-          <div className="banner-form">
+          <section className="banner-form">
             <div className="ant-row ant-form-item">
               <div className="ant-col-3 ant-form-item-label">
                 <label>创意名称</label>
@@ -251,14 +273,15 @@ class solutionListPage extends React.Component {
                 <Input ref="bannerMemo"  placeholder="备注或描述信息"/>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div className="opts">
+          <section className="opts">
             <Button type="primary" size="large"
               onClick={this.save.bind(this)}>
-              保存并继续上传图片<Icon type="right" />
+              保存<Icon type="right" />
             </Button>
-          </div>
+          </section>
+          </Spin>
         </div>
 
       </Layout>
