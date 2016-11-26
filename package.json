@@ -18,9 +18,9 @@
   "homepage": "https://code.aliyun.com/sys/yac-application#readme",
   "dependencies": {
     "antd": "^2.1.0",
+    "echarts-for-react": "^1.1.6",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "react-google-charts": "^1.1.1",
     "react-router": "^2.8.1",
     "whatwg-fetch": "^1.0.0"
   },

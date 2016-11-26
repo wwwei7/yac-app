@@ -4,6 +4,8 @@ import { Router, Route, hashHistory, Redirect, IndexRedirect } from 'react-route
 import auth from './auth'
 
 import homePage from '../components/Pages/home';
+import reportDailyPage from '../components/Pages/reportDaily';
+import reportHourPage from '../components/Pages/reportHour';
 import reportMediaPage from '../components/Pages/reportMedia';
 import solutionListPage from '../components/Pages/solutionList';
 import solutionNewPage from '../components/Pages/solutionNew';
@@ -33,7 +35,9 @@ class Routes extends Component{
                     <IndexRedirect to="home" />
                 </Route>
                 <Route path="home" component={homePage} onEnter={auth}></Route>
-                <Route path="/:aid/reportmedia" component={reportMediaPage} onEnter={auth}></Route>
+                <Route path="/:aid/reportdaily" component={reportDailyPage} onEnter={auth}></Route>
+                <Route path="/:aid/reporthour" component={reportHourPage} onEnter={auth}></Route>
+                <Route path="/:aid/reportmedia" component={reportMediaPage} onEnter={auth}></Route>                
                 <Route path="/:aid/solution" component={solutionNewPage} onEnter={auth}></Route>                               
                 <Route path="/:aid/solutionlist" component={solutionListPage} onEnter={auth}></Route>
                 <Route path="/:aid/solution/:sid/edit" component={solutionEditPage} onEnter={auth}></Route>                

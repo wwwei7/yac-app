@@ -43,8 +43,12 @@ class Sider extends React.Component{
         id="yac-sider" 
       >
         <SubMenu key="reportManagement" title={<span><Icon type="bar-chart" /><span>报表</span></span>}>
-          <Menu.Item key="reportDaily"><Icon type="clock-circle-o" />小时报表</Menu.Item>
-          <Menu.Item key="reportMonthly"><Icon type="line-chart" />全天报表</Menu.Item>
+          <Menu.Item key="reportDaily"><Icon type="clock-circle-o" />
+            <Link to={`/${this.aid}/reportdaily`}>全天报表</Link>
+          </Menu.Item>
+          <Menu.Item key="reportHour"><Icon type="line-chart" />
+            <Link to={`/${this.aid}/reporthour`}>小时报表</Link>
+          </Menu.Item>
           <Menu.Item key="reportMedia"><Icon type="area-chart" />
             <Link to={`/${this.aid}/reportmedia`}>媒体报表</Link>
           </Menu.Item>          
