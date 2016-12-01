@@ -78,14 +78,9 @@ class Region extends React.Component {
     }
   }
 
-  onChange(value, label, extra){
-    alert(value)
-  }
-
   render() {
     const type = this.props.value.type;
-    const cityValue = this.getInputValue(type)
-    const ipValue = this.getInputValue(type)
+    const inputValue = this.getInputValue(type);
 
     this.type =  type;
 
@@ -97,7 +92,7 @@ class Region extends React.Component {
       showCheckedStrategy: SHOW_PARENT,
       searchPlaceholder: '请选择省/市',
       onChange: this.inputOnChange.bind(this),
-      value: cityValue,
+      value: inputValue,
       getPopupContainer: () => document.getElementById('yac-content'),
       style: {
         width: 600
@@ -109,18 +104,13 @@ class Region extends React.Component {
         <Radio className="radio-item" key="r1" value={1}>无地域定向（全网）</Radio>
         <Radio className="radio-item" key="r2" value={2}>选择城市定向</Radio>
         <div className={type==2 ? 'city' : 'hidden'}>
-        {
-          // <Cascader ref="cityInput" size="large" options={cityOptions} 
-          //   value={cityValue}
-          //   onChange={this.inputOnChange.bind(this)} changeOnSelect />
-        }
           <TreeSelect {...cityProps}/>
         </div>
         
         <Radio className="radio-item" key="r3" value={3}>自定义IP地域库</Radio>
         <div className={type==3 ? 'ip' : 'hidden'}>
             <Input ref="ipInput" type="textarea" placeholder="请使用分号（；）分隔" 
-            value={ipValue}
+            value={inputValue}
             onChange={this.inputOnChange.bind(this)} />
         </div>
       </RadioGroup>

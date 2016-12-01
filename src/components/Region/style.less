@@ -16,11 +16,17 @@
 #yac-content{
     .ant-select-tree{
         overflow: hidden;
+        li{
+            float: left;
+            margin: 3px 5px;
+            min-width: 100px;
+            >ul{
+                border: 1px solid #eee;
+                overflow: hidden;
+                border-top: 0;
+            }
+        }
     }
-    .ant-select-tree li{
-        float: left;
-        margin: 3px 5px;
-        min-width: 100px;
-    }
+    
 }
 
