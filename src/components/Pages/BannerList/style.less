@@ -1,0 +1,31 @@
+.bannerlist{
+  .nodata{
+    margin: 50px;
+    h1,h2{
+      line-height: 50px;
+      font-weight: normal;
+    }
+  }
+  .preview{
+    position: relative;    
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    .preview-img{
+      max-width: 100%;
+    }
+    .origin-img{
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 130px;
+      z-index: 1;
+      line-height: 1;
+      padding: 10px;
+      background: #e3e3e3;
+    }
+    &:hover .origin-img{
+      display: block;
+    }
+  }
+}

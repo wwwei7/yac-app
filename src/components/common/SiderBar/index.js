@@ -68,6 +68,9 @@ class Sider extends React.Component{
         </Menu.Item>
 
         <SubMenu key="bannerManagement" title={<span><Icon type="picture" /><span>素材管理</span></span>}>
+          <Menu.Item key="bannerList"><Icon type="windows" />
+            <Link to={`/${this.aid}/bannerlist`}>素材列表</Link>
+          </Menu.Item>
           <Menu.Item key="bannerNew"><Icon type="plus-square" />
             <Link to={`/${this.aid}/bannernew`}>新增素材</Link>
           </Menu.Item>

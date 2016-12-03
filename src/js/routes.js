@@ -13,7 +13,8 @@ import solutionEditPage from '../components/Pages/solutionEdit';
 import budgetPage from '../components/Pages/Budget';
 import adInfoPage from '../components/Pages/AdInfo';
 import financePage from '../components/Pages/Finance';
-import bannerPage from '../components/Pages/BannerNew'
+import bannerListPage from '../components/Pages/BannerList';
+import bannerPage from '../components/Pages/BannerNew';
 
 
 class Routes extends Component{
@@ -44,6 +45,7 @@ class Routes extends Component{
                 <Route path="budget" component={budgetPage} onEnter={auth}></Route>
                 <Route path="adinfo" component={adInfoPage} onEnter={auth}></Route>    
                 <Route path="finance" component={financePage} onEnter={auth}></Route>
+                <Route path="/:aid/bannerlist" component={bannerListPage} onEnter={auth}></Route>                                                                                                                                                                          
                 <Route path="/:aid/bannernew" component={bannerPage} onEnter={auth}></Route>                                                                                                                                                          
             </Router>
         )
