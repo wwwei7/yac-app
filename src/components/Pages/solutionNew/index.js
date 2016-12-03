@@ -2,8 +2,10 @@ import React from 'react';
 import { Button, Form, Input, Select, DatePicker, InputNumber, 
   Radio, Card, Spin, Modal} from 'antd';
 import Layout from '../../common/Layout';
-import style from './style.less';
 import Region from '../../Region';
+import moment from 'moment';
+import './style.less';
+
 
 const createForm = Form.create;
 const FormItem = Form.Item;
@@ -25,11 +27,8 @@ let SolutionPage = React.createClass({
     e.preventDefault();
     this.props.form.validateFields((errors, values) => {
       if (!!errors) {
-        console.log('Errors in form!!!');
         return;
       }
-      console.log('Submit!!!');
-      console.log(values);
       this.postForm(values);
     });
   },
@@ -59,9 +58,29 @@ let SolutionPage = React.createClass({
     })
   },
 
-  disabledStartDate(val){
-    //TODO
+  disabledStartDate(current){
+    let yesterday = ((date = new Date()) => date.setDate(date.getDate()-1))();
+    return current && current.valueOf() <= yesterday;  
   },
+
+  disabledEndDate(current){
+    let startDate = this.props.form.getFieldValue('start');
+    if(startDate)
+      return current && current.valueOf() <= startDate.valueOf();
+    else{
+      let yesterday = ((date = new Date()) => date.setDate(date.getDate()-1))();    
+      return current && current.valueOf() <= yesterday;  
+    }
+  },
+
+  endDateBeyondStart(rule, value, callback){
+    let startDate = this.props.form.getFieldValue('start')
+    if(startDate && value && startDate.valueOf() > value.valueOf()){
+      callback([new Error(`结束日期不得小于开始日期`)])      
+    }else
+      callback()    
+  },
+
 
   postForm(values){
     const postUrl = '/api/v1/solution';
@@ -107,6 +126,8 @@ let SolutionPage = React.createClass({
     });
   },
 
+  
+
   render() {
     const { getFieldDecorator, getFieldError, isFieldValidating } = this.props.form;
 
@@ -142,24 +163,27 @@ let SolutionPage = React.createClass({
             label="开始时间"
           >
             {getFieldDecorator('start', {
+              initialValue: moment(),
               rules: [
-                { required: true }
+                { required: true, message: '开始时间不能为空' }           
               ]
             })(
-              <DatePicker></DatePicker>
+              <DatePicker disabledDate={this.disabledStartDate}></DatePicker>
             )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
             label="结束时间"
+
+            help={ getFieldError('end') }
           >
             {getFieldDecorator('end', {
               rules: [
-                { required: true }
+                { validator: this.endDateBeyondStart }                
               ]
             })(
-              <DatePicker></DatePicker>
+              <DatePicker disabledDate={this.disabledEndDate}></DatePicker>
             )}
           </FormItem>
 

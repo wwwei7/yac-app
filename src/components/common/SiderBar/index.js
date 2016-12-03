@@ -15,16 +15,10 @@ class Sider extends React.Component{
       current: this.props.current
     };
   }
-  componentDidMount(){
-    console.log(this.state.openKeys);
-  }
+
   // 设置advertiserID
   componentWillMount(){
     this.aid = store.getAdvertiser().id;
-    // const aid = store.getAdvertiser().id;
-    // this.setState({
-    //   aid: aid
-    // })
   }
 
   handleClick(e) {
