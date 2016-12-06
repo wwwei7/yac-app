@@ -12,14 +12,11 @@ const getAdvertiser = () => {
 
 const setUser = user => {
   Object.assign(userStore,user);
-  console.log(userStore)
 }
 
 const setAdvertiser = advertiser => {
-  console.log(advertiser)
   Object.assign(advertiserStore,advertiser); 
   sessionStorage.setItem('aid',advertiser.id)
-  console.log('set:' + advertiser.id)
 }
 
 const clear = () => {

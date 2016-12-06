@@ -37,7 +37,7 @@ class bannerListPage extends React.Component {
       render: record => `${record.width} x ${record.height}`
     }, {
       title: '点击地址',
-      dataIndex: 'link'
+      render: record => <a href={record.link} target="_blank">{record.link}</a>
     }, {
       title: '操作',
       render: record => <a data-bid={record.id} onClick={this.delete.bind(this)}>删除</a>
