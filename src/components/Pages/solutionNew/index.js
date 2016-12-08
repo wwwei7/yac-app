@@ -25,10 +25,15 @@ let SolutionPage = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.form.validateFields((errors, values) => {
+    this.props.form.validateFields((errors, fieldsValue) => {
       if (!!errors) {
         return;
       }
+      const values = {
+        ...fieldsValue,
+        'start': fieldsValue['start'].format('YYYY-MM-DD'),
+        'end': fieldsValue['end'].format('YYYY-MM-DD')
+      };
       this.postForm(values);
     });
   },
@@ -91,8 +96,8 @@ let SolutionPage = React.createClass({
         region_type: values.region.type,
         region_value: values.region.value,
         adx: 'baidu',
-        start: values.start.format("YYYY-MM-DD"),
-        end: values.end.format("YYYY-MM-DD"),
+        start: values.start,
+        end: values.end,
         budget: values.budget,
         price: values.price
       };
@@ -165,7 +170,7 @@ let SolutionPage = React.createClass({
             {getFieldDecorator('start', {
               initialValue: moment(),
               rules: [
-                { required: true, message: '开始时间不能为空' }           
+                { type: 'object', required: true, message: '开始时间不能为空' }           
               ]
             })(
               <DatePicker disabledDate={this.disabledStartDate}></DatePicker>
@@ -180,7 +185,7 @@ let SolutionPage = React.createClass({
           >
             {getFieldDecorator('end', {
               rules: [
-                { validator: this.endDateBeyondStart }                
+                { type: 'object', validator: this.endDateBeyondStart }                
               ]
             })(
               <DatePicker disabledDate={this.disabledEndDate}></DatePicker>

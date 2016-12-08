@@ -1,11 +1,10 @@
 import React from 'react';
-import {render} from 'react-dom';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import Echart from 'echarts';
+import { DatePicker, message } from 'antd';
+import Moment from 'moment';
 import map from 'echarts/map/js/china.js';
-import style from './style.less';
-import 'antd/dist/antd.css';
+import './style.less';
 
 
 
@@ -14,88 +13,146 @@ class reportHourPage extends React.Component {
     super(props);
     this.state = {
     };
+
+    // 初始化日期
+    this.day = Moment().subtract(1, 'days');    
+
+    // chart
+    this.chartOption = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      toolbox: {
+        right: 50,
+        itemGap: 15,
+        height: 100,
+        feature: {
+          dataView: {show: false, readOnly: false},
+          magicType: {show: true, type: ['line', 'bar']},
+          restore: {show: true},
+          saveAsImage: {show: true}
+        }
+      },
+      legend: {
+        // data:['展示数','点击数','花费']
+        data:['展示数','点击数']        
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          min: 0,
+          max: 250,
+          interval: 50,
+          axisLabel: {
+              formatter: '{value}'
+          }
+        },
+        {
+          type: 'value',
+          min: 0,
+          max: 25,
+          interval: 5,
+          axisLabel: {
+              formatter: '{value}'
+          }
+        }
+      ],
+      color: ['#bfe3f5', '#009a61', '#a94442'],
+      series: [
+        {
+          name:'展示数',
+          type:'bar',
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        {
+          name:'点击数',
+          type:'bar',
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        // {
+        //   name:'花费',
+        //   type:'line',
+        //   yAxisIndex: 1,
+        //   data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        // }
+      ],
+      dataZoom: {
+          backgroundColor: 'rgba(0,0,0,0)',       // 背景颜色
+          dataBackgroundColor: '#eee',            // 数据背景颜色
+          fillerColor: 'rgba(144,197,237,0.2)',   // 填充颜色
+          handleColor: 'rgba(70,130,180,0.8)'     // 手柄颜色
+      }
+    }
   }
 
-  getOption(){
-      return {
-        tooltip: {
-            trigger: 'axis'
-        },
-        toolbox: {
-            right: 50,
-            itemGap: 15,
-            height: 100,
-            feature: {
-                dataView: {show: false, readOnly: false},
-                magicType: {show: true, type: ['line', 'bar']},
-                restore: {show: true},
-                saveAsImage: {show: true}
-            }
-        },
-        legend: {
-            data:['竞价次数','竞价成功数','平均花费']
-        },
-        xAxis: [
-            {
-                type: 'category',
-                data: ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                name: '千次',
-                min: 0,
-                max: 250,
-                interval: 50,
-                axisLabel: {
-                    formatter: '{value}'
-                }
-            },
-            {
-                type: 'value',
-                name: '',
-                min: 0,
-                max: 25,
-                interval: 5,
-                axisLabel: {
-                    formatter: '￥ {value}'
-                }
-            }
-        ],
-        series: [
-            {
-                name:'竞价次数',
-                type:'bar',
-                data:[3.0, 4.9, 17.0, 28.2, 35.6, 76.7, 195.6, 202.2, 72.6, 20.0, 6.4, 3.3, 4.0, 8.9, 12.0, 53.2, 35.6, 76.7, 185.6, 222.2, 52.6, 23.0, 12.4, 3.3]
-            },
-            {
-                name:'竞价成功数',
-                type:'bar',
-                data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3, 2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-            },
-            {
-                name:'平均花费',
-                type:'line',
-                yAxisIndex: 1,
-                data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2, 2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-            }
-        ],
-        dataZoom: {
-            orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
-                                    // 'horizontal' ¦ 'vertical'
-            // x: {number},            // 水平安放位置，默认为根据grid参数适配，可选为：
-                                    // {number}（x坐标，单位px）
-            // y: {number},            // 垂直安放位置，默认为根据grid参数适配，可选为：
-                                    // {number}（y坐标，单位px）
-            // width: {number},        // 指定宽度，横向布局时默认为根据grid参数适配
-            // height: {number},       // 指定高度，纵向布局时默认为根据grid参数适配
-            backgroundColor: 'rgba(0,0,0,0)',       // 背景颜色
-            dataBackgroundColor: '#eee',            // 数据背景颜色
-            fillerColor: 'rgba(144,197,237,0.2)',   // 填充颜色
-            handleColor: 'rgba(70,130,180,0.8)'     // 手柄颜色
-        }
-    };
+  componentDidMount(){
+    // 初始化echart实例
+    this.chart = this.refs.chart.getEchartsInstance();
+
+    // 渲染报表
+    this.renderChart()
+  }
+
+  chartDataTrans(data){
+    let showArray = this.chartOption.series[0].data,
+        clickArray = this.chartOption.series[1].data;
+
+    for(let logItem of data){
+      switch(logItem.event_type){
+        case 0: //unknow
+        case 1: //bid
+          break;
+        case 2: //show
+          showArray[logItem.hour] = logItem.total;
+          break;
+        case 3: //click
+          clickArray[logItem.hour] = logItem.total;
+          break;
+      }
+    }
+
+    this.chart.setOption(this.chartOption)
+    
+  }
+
+  renderChart(){
+
+    const reportUrl = `/api/v1/report/hour/${this.props.params.aid}/${this.day.format('YYYY-MM-DD')}`;
+
+    this.chart.showLoading();
+
+    fetch(reportUrl).then(res =>
+      res.json()
+    ).then(data => {
+      this.chartDataTrans(data);
+      this.chart.hideLoading();      
+    },function(err){
+      message.error('获取报表数据失败', 4);
+      this.chart.hideLoading();      
+    })
+  }
+
+  setDay(day){
+    this.day = day;
+  }
+
+  dateChange(date){
+    if(date.format('YYYY-MM-DD') == this.day.format('YYYY-MM-DD'))
+      return;
+
+    this.setDay(date);
+    
+    this.renderChart()
+  }
+  
+  disabledDate(current) {
+    return current && current.valueOf() > Date.now();
   }
 
   onChartClick(e){
@@ -113,16 +170,25 @@ class reportHourPage extends React.Component {
     }
     return (
       <Layout current='reportHour' open='reportManagement'>
-        <h1 className='page-title'>小时报表（仅为示例）</h1>
+        <h1 className='page-title'>小时报表</h1>
         
+        <div className='query-container'>
+            <label>请选择要查看的报表日期：</label>
+            <DatePicker 
+              showToday={false}
+              defaultValue={this.day}
+              disabledDate={this.disabledDate}
+              onChange={this.dateChange.bind(this)} />
+        </div>
         <ReactEcharts
-            option={this.getOption()} 
-            notMerge={true}
-            lazyUpdate={true}
-            theme={"theme_name"}
-            style={{height: '450px', width: '100%'}} 
-            onChartReady={this.onChartReadyCallback}
-            onEvents={onChartEvents} />
+          ref='chart'
+          option={this.chartOption} 
+          notMerge={true}
+          lazyUpdate={true}
+          theme={"theme_name"}
+          style={{height: '450px', width: '100%'}} 
+          onChartReady={this.onChartReadyCallback}
+          onEvents={onChartEvents} />
         
       </Layout>
     );

@@ -44,10 +44,15 @@ let SolutionPage = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.form.validateFields((errors, values) => {
+    this.props.form.validateFields((errors, fieldsValue) => {
       if (!!errors) {
         return;
       }
+      const values = {
+        ...fieldsValue,
+        'start': fieldsValue['start'].format('YYYY-MM-DD'),
+        'end': fieldsValue['end'].format('YYYY-MM-DD')
+      };
       this.postForm(values);
     });
   },
@@ -190,7 +195,7 @@ let SolutionPage = React.createClass({
             {getFieldDecorator('start', {
               initialValue: moment(),
               rules: [
-                { required: true }
+                { type: 'object', required: true, message: '开始时间不能为空' }
               ]
             })(
               <DatePicker disabledDate={this.disabledStartDate}></DatePicker>
@@ -204,7 +209,7 @@ let SolutionPage = React.createClass({
           >
             {getFieldDecorator('end', {
               rules: [
-                { validator: this.endDateBeyondStart }                
+                { type: 'object', validator: this.endDateBeyondStart }                
               ]
             })(
               <DatePicker disabledDate={this.disabledEndDate}></DatePicker>

@@ -1,83 +1,156 @@
 import React from 'react';
-import {render} from 'react-dom';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import Echart from 'echarts';
+import { DatePicker, message } from 'antd';
+import Moment from 'moment';
 import map from 'echarts/map/js/china.js';
-import style from './style.less';
-import 'antd/dist/antd.css';
+import './style.less';
 
-
+const RangePicker = DatePicker.RangePicker;
 
 class reportDailyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     };
+
+    // chart
+    this.chartOption = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      toolbox: {
+        right: 50,
+        itemGap: 15,
+        height: 100,
+        feature: {
+          dataView: {show: false, readOnly: false},
+          magicType: {show: true, type: ['line', 'bar']},
+          restore: {show: true},
+          saveAsImage: {show: true}
+        }
+      },
+      legend: {
+        // data:['展示数','点击数','花费']
+        data:['展示数','点击数']        
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: []
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          min: 0,
+          max: 250,
+          interval: 50,
+          axisLabel: {
+              formatter: '{value}'
+          }
+        },
+        {
+          type: 'value',
+          min: 0,
+          max: 25,
+          interval: 5,
+          axisLabel: {
+              formatter: '{value}'
+          }
+        }
+      ],
+      color: ['#bfe3f5', '#009a61', '#a94442'],
+      series: [
+        {
+          name:'展示数',
+          type:'bar',
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        {
+          name:'点击数',
+          type:'bar',
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        // {
+        //   name:'花费',
+        //   type:'line',
+        //   yAxisIndex: 1,
+        //   data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        // }
+      ],
+      dataZoom: {
+          backgroundColor: 'rgba(0,0,0,0)',       // 背景颜色
+          dataBackgroundColor: '#eee',            // 数据背景颜色
+          fillerColor: 'rgba(144,197,237,0.2)',   // 填充颜色
+          handleColor: 'rgba(70,130,180,0.8)'     // 手柄颜色
+      }
+    }
   }
 
-  getOption(){
-      return {
-            tooltip: {
-                trigger: 'axis'
-            },
-            toolbox: {
-                right: 50,
-                feature: {
-                    dataView: {show: false, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
-                }
-            },
-            legend: {
-                data:['竞价次数','竞价成功数','花费']
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    min: 0,
-                    max: 250,
-                    interval: 50,
-                    axisLabel: {
-                        formatter: '{value} 千次'
-                    }
-                },
-                {
-                    type: 'value',
-                    min: 0,
-                    max: 25,
-                    interval: 5,
-                    axisLabel: {
-                        formatter: '￥ {value}'
-                    }
-                }
-            ],
-            series: [
-                {
-                    name:'竞价次数',
-                    type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-                },
-                {
-                    name:'竞价成功数',
-                    type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-                },
-                {
-                    name:'花费',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-                }
-            ]
-        };
+  componentDidMount(){
+    // 初始化echart实例
+    this.chart = this.refs.chart.getEchartsInstance();
+
+    // 渲染报表
+    this.renderChart()
+  }
+
+  chartDataTrans(data){
+    let showArray = this.chartOption.series[0].data,
+        clickArray = this.chartOption.series[1].data;
+
+    for(let logItem of data){
+      switch(logItem.event_type){
+        case 0: //unknow
+        case 1: //bid
+          break;
+        case 2: //show
+          showArray[logItem.hour] = logItem.total;
+          break;
+        case 3: //click
+          clickArray[logItem.hour] = logItem.total;
+          break;
+      }
+    }
+
+    this.chart.setOption(this.chartOption)
+    
+  }
+
+  renderChart(){
+
+    const reportUrl = `/api/v1/report/hour/${this.props.params.aid}/${this.day.format('YYYY-MM-DD')}`;
+
+    this.chart.showLoading();
+
+    fetch(reportUrl).then(res =>
+      res.json()
+    ).then(data => {
+      this.chartDataTrans(data);
+      this.chart.hideLoading();      
+    },function(err){
+      message.error('获取报表数据失败', 4);
+      this.chart.hideLoading();      
+    })
+  }
+
+  setDay(days){
+    this.start = days[0];
+    this.end = days[1];
+  }
+
+  dateChange(moments, days){
+    if(this.start == days[0] && this.end == days[1])
+      return;
+
+    this.setDay(days);
+    
+    this.renderChart()
+  }
+
+  disabledDate(current) {
+    return current && current.valueOf() > Date.now();
   }
 
   onChartClick(e){
@@ -95,16 +168,24 @@ class reportDailyPage extends React.Component {
     }
     return (
       <Layout current='reportDaily' open='reportManagement'>
-        <h1 className='page-title'>全天报表（仅为示例）</h1>
+        <h1 className='page-title'>全天报表</h1>
         
+        <div className='query-container'>
+            <label>请选择日期范围：</label>
+            <RangePicker 
+                disabledDate={this.disabledDate}
+                onChange={this.dateChange.bind(this)}
+            />
+        </div>
         <ReactEcharts
-            option={this.getOption()} 
-            notMerge={true}
-            lazyUpdate={true}
-            theme={"theme_name"}
-            style={{height: '450px', width: '100%'}} 
-            onChartReady={this.onChartReadyCallback}
-            onEvents={onChartEvents} />
+          ref='chart'
+          option={this.chartOption} 
+          notMerge={true}
+          lazyUpdate={true}
+          theme={"theme_name"}
+          style={{height: '450px', width: '100%', marginTop: '20px'}} 
+          onChartReady={this.onChartReadyCallback}
+          onEvents={onChartEvents} />
         
       </Layout>
     );
