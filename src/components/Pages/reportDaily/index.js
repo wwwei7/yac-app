@@ -65,8 +65,8 @@ class reportDailyPage extends React.Component {
           type: 'value',
           name: '点击',          
           min: 0,
-          max: 10,
-          interval: 2,
+          max: 1000,
+          interval: 200,
           position: 'right',
           axisLine: {
             lineStyle: {
@@ -134,8 +134,8 @@ class reportDailyPage extends React.Component {
   computeMaxMark(max){
     let maxMark = 1;
     if(max>1){
-        let fill = '0';
-        for(let i=1;i<String(max).length-1;i++){
+        let fill = '';
+        for(let i=0;i<String(max).split('.')[0].length-1;i++){
             fill += '0';
         }
         maxMark = parseInt(parseInt(String(max).substring(0,1))+1 + fill);

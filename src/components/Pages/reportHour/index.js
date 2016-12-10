@@ -56,7 +56,7 @@ class reportHourPage extends React.Component {
         {
           type: 'category',
           axisTick: {alignWithLabel: true},
-          data: ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
+          data: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24']
         }
       ],
       yAxis: [
@@ -79,8 +79,8 @@ class reportHourPage extends React.Component {
           type: 'value',
           name: '点击',          
           min: 0,
-          max: 10,
-          interval: 2,
+          max: 500,
+          interval: 100,
           position: 'right',
           axisLine: {
             lineStyle: {
@@ -123,7 +123,7 @@ class reportHourPage extends React.Component {
         },
         {
           name:'花费',
-          type:'bar',
+          type:'line',
           yAxisIndex: 2,
           data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         }
@@ -148,8 +148,8 @@ class reportHourPage extends React.Component {
   computeMaxMark(max){
     let maxMark = 1;
     if(max>1){
-        let fill = '0';
-        for(let i=1;i<String(max).length-1;i++){
+        let fill = '';
+        for(let i=0;i<String(max).split('.')[0].length-1;i++){
             fill += '0';
         }
         maxMark = parseInt(parseInt(String(max).substring(0,1))+1 + fill);
