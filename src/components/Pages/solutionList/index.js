@@ -65,7 +65,7 @@ class solutionListPage extends React.Component {
         aid: item.advertiser_id,
         name: item.solution_name,
         start: Moment(item.start_date).format('YYYY-MM-DD'),        
-        end: item.end_date? Moment(item.end_date).format('YYYY-MM-DD') : '',
+        end: item.end_date ? Moment(item.end_date).format('YYYY-MM-DD') : '',
         price: item.price,
         budget: item.budget
       })
