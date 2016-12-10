@@ -37,6 +37,8 @@ class reportDailyPage extends React.Component {
       xAxis: [
         {
           type: 'category',
+          boundaryGap: true,
+          nameLocation: 'start',
           data: []
         }
       ],
@@ -65,12 +67,12 @@ class reportDailyPage extends React.Component {
         {
           name:'展示数',
           type:'bar',
-          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          data: []
         },
         {
           name:'点击数',
           type:'bar',
-          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          data: []
         },
         // {
         //   name:'花费',
@@ -93,41 +95,43 @@ class reportDailyPage extends React.Component {
     this.chart = this.refs.chart.getEchartsInstance();
 
     // 渲染报表
-    this.renderChart()
+    // this.renderChart()
   }
 
-  chartDataTrans(data){
-    let showArray = this.chartOption.series[0].data,
-        clickArray = this.chartOption.series[1].data;
+  setChartData(data){
+    
+    const days = Object.keys(data);
+    let showArray = [];
+    let clickArray = [];
+    let moneyArray = [];
 
-    for(let logItem of data){
-      switch(logItem.event_type){
-        case 0: //unknow
-        case 1: //bid
-          break;
-        case 2: //show
-          showArray[logItem.hour] = logItem.total;
-          break;
-        case 3: //click
-          clickArray[logItem.hour] = logItem.total;
-          break;
-      }
+    for (let day of days){
+        showArray.push(data[day].show);
+        clickArray.push(data[day].click);
+        moneyArray.push(data[day].money);        
     }
 
+    // 日期坐标轴（x)
+    this.chartOption.xAxis[0].data = days;    
+    
+    // 数据
+    this.chartOption.series[0].data = showArray,
+    this.chartOption.series[1].data = clickArray;
+    
     this.chart.setOption(this.chartOption)
     
   }
 
   renderChart(){
 
-    const reportUrl = `/api/v1/report/hour/${this.props.params.aid}/${this.day.format('YYYY-MM-DD')}`;
+    const reportUrl = `/api/v1/report/${this.props.params.aid}/days/${this.start}t${this.end}`;
 
     this.chart.showLoading();
 
     fetch(reportUrl).then(res =>
       res.json()
     ).then(data => {
-      this.chartDataTrans(data);
+      this.setChartData(data);
       this.chart.hideLoading();      
     },function(err){
       message.error('获取报表数据失败', 4);

@@ -61,7 +61,7 @@ let SolutionPage = React.createClass({
     let initData = {
       name: data.solution_name,
       start: moment(data.start_date,'YYYY-MM-DD'),
-      end: moment(data.end_date,'YYYY-MM-DD'),
+      end: data.end_date ? moment(data.end_date,'YYYY-MM-DD') : '',
       region: this.presetRegion(data.region_type, data.region_value),
       price: data.price,
       media: data.media,

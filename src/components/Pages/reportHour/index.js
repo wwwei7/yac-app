@@ -1,12 +1,24 @@
 import React from 'react';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Table } from 'antd';
 import Moment from 'moment';
 import map from 'echarts/map/js/china.js';
 import './style.less';
 
-
+const columns = [{
+  title: '小时段',
+  dataIndex: 'hour',
+}, {
+  title: '点击数',
+  dataIndex: 'click',
+}, {
+  title: '展示数',
+  dataIndex: 'show',
+}, {
+  title: '花费',
+  dataIndex: 'money',
+}];
 
 class reportHourPage extends React.Component {
   constructor(props) {
@@ -99,38 +111,41 @@ class reportHourPage extends React.Component {
     this.renderChart()
   }
 
-  chartDataTrans(data){
-    let showArray = this.chartOption.series[0].data,
-        clickArray = this.chartOption.series[1].data;
+  setChartData(data){
+    this.chartData = data;
 
-    for(let logItem of data){
-      switch(logItem.event_type){
-        case 0: //unknow
-        case 1: //bid
-          break;
-        case 2: //show
-          showArray[logItem.hour] = logItem.total;
-          break;
-        case 3: //click
-          clickArray[logItem.hour] = logItem.total;
-          break;
-      }
+    this.chartOption.series[0].data = data.showArr;
+    this.chartOption.series[1].data = data.clickArr;
+
+    this.chart.setOption(this.chartOption); 
+  }
+  
+  setTableData(data){
+    let tableArr = [];
+    for(let i=0;i<24;i++){
+      tableArr.push({
+        hour: i,
+        show: data.showArr[i],
+        click: data.clickArr[i],
+        money: data.moneyArr[i]
+      })
     }
-
-    this.chart.setOption(this.chartOption)
-    
+    this.setState({
+      tableData: tableArr
+    })
   }
 
   renderChart(){
 
-    const reportUrl = `/api/v1/report/hour/${this.props.params.aid}/${this.day.format('YYYY-MM-DD')}`;
+    const reportUrl = `/api/v1/report/${this.props.params.aid}/hour/${this.day.format('YYYY-MM-DD')}`;
 
     this.chart.showLoading();
 
     fetch(reportUrl).then(res =>
       res.json()
     ).then(data => {
-      this.chartDataTrans(data);
+      this.setChartData(data);
+      this.setTableData(data);
       this.chart.hideLoading();      
     },function(err){
       message.error('获取报表数据失败', 4);
@@ -150,7 +165,7 @@ class reportHourPage extends React.Component {
     
     this.renderChart()
   }
-  
+
   disabledDate(current) {
     return current && current.valueOf() > Date.now();
   }
@@ -189,6 +204,9 @@ class reportHourPage extends React.Component {
           style={{height: '450px', width: '100%'}} 
           onChartReady={this.onChartReadyCallback}
           onEvents={onChartEvents} />
+
+        <Table
+            columns={columns} dataSource={this.state.tableData}/>
         
       </Layout>
     );
