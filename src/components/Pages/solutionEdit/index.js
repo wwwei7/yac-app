@@ -51,7 +51,7 @@ let SolutionPage = React.createClass({
       const values = {
         ...fieldsValue,
         'start': fieldsValue['start'].format('YYYY-MM-DD'),
-        'end': fieldsValue['end'].format('YYYY-MM-DD')
+        'end': fieldsValue['end'] ? fieldsValue['end'].format('YYYY-MM-DD') : fieldsValue['end']
       };
       this.postForm(values);
     });
@@ -180,7 +180,7 @@ let SolutionPage = React.createClass({
           >
             {getFieldDecorator('name', {
               rules: [
-                { required: true, min: 5, max: 16, message: '推广计划名称长度范围需要在3~16个字符之间' },
+                { required: true, min: 2, max: 16, message: '推广计划名称长度范围需要在2~16个字符之间' },
                 { validator: this.nameExists },
               ],
             })(

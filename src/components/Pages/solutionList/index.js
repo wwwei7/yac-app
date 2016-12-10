@@ -3,7 +3,8 @@ import Layout from '../../common/Layout';
 import {Table} from 'antd';
 import { Link } from 'react-router';
 import classNames from 'classnames';
-import style from './style.less';
+import Moment from 'moment';
+import './style.less';
 
 
 const columns = [{
@@ -63,8 +64,8 @@ class solutionListPage extends React.Component {
         id: item.id,
         aid: item.advertiser_id,
         name: item.solution_name,
-        start: item.start_date.split('T')[0],        
-        end: item.end_date.split('T')[0],
+        start: Moment(item.start_date).format('YYYY-MM-DD'),        
+        end: item.end_date? Moment(item.end_date).format('YYYY-MM-DD') : '',
         price: item.price,
         budget: item.budget
       })
