@@ -63,9 +63,6 @@ class reportHourPage extends React.Component {
         {
           type: 'value',
           name: '展示',          
-          min: 0,
-          max: 250,
-          interval: 50,
           axisLine: {
             lineStyle: {
               color: '#5793f3'
@@ -77,10 +74,7 @@ class reportHourPage extends React.Component {
         },
         {
           type: 'value',
-          name: '点击',          
-          min: 0,
-          max: 500,
-          interval: 100,
+          name: '点击',      
           position: 'right',
           axisLine: {
             lineStyle: {
@@ -93,10 +87,7 @@ class reportHourPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费',          
-          min: 0,
-          max: 25,
-          interval: 5,
+          name: '花费',
           offset: 60,
           axisLine: {
             lineStyle: {
@@ -181,9 +172,6 @@ class reportHourPage extends React.Component {
     this.chartOption.series[0].data = data.showArr;
     this.chartOption.series[1].data = data.clickArr;
     this.chartOption.series[2].data = data.moneyArr;
-
-    this.setShowAxis(data.maxShow);
-    this.setMoneyAxis(data.maxMoney);
 
     this.chart.setOption(this.chartOption); 
   }

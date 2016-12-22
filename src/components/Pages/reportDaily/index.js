@@ -49,9 +49,6 @@ class reportDailyPage extends React.Component {
         {
           type: 'value',
           name: '展示',          
-          min: 0,
-          max: 250,
-          interval: 50,
           axisLine: {
             lineStyle: {
               color: '#5793f3'
@@ -64,9 +61,6 @@ class reportDailyPage extends React.Component {
         {
           type: 'value',
           name: '点击',          
-          min: 0,
-          max: 1000,
-          interval: 200,
           position: 'right',
           axisLine: {
             lineStyle: {
@@ -79,10 +73,7 @@ class reportDailyPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费',          
-          min: 0,
-          max: 25,
-          interval: 5,
+          name: '花费',
           offset: 60,
           axisLine: {
             lineStyle: {
@@ -184,7 +175,7 @@ class reportDailyPage extends React.Component {
     }
 
     this.setShowAxis(maxShow);
-    this.setMoneyAxis(maxMoney);
+    // this.setMoneyAxis(maxMoney);
 
     // 日期坐标轴（x)
     this.chartOption.xAxis[0].data = days;

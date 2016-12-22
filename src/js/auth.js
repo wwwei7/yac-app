@@ -19,7 +19,7 @@ const auth = function(nextState, replace, next){
             window.location = '/';
         }
     }).catch(function(e){
-        console.log('error')
+        console.log(e)
     })
 }
 
