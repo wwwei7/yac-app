@@ -8,118 +8,118 @@ import './style.less';
 
 const RangePicker = DatePicker.RangePicker;
 
-var option = {
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-        }
-    },
-    grid: {
-        left: '3%',
-        right: '50px',
-        bottom: '3%',
-        containLabel: true
-    },
-		legend: {
-        data: ['展示', '点击', '花费']
-    },
-		color: [new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
-							offset: 0,
-							color: 'lightBlue' // 0% 处的颜色
-					}, {
-							offset: 1,
-							color: '#3398DB' // 100% 处的颜色
-					}], false),
-					new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
-							offset: 0,
-							color: 'lightGreen' // 0% 处的颜色
-					}, {
-							offset: 1,
-							color: '#009a61' // 100% 处的颜色
-					}], false), 
-					new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
-							offset: 0,
-							color: '#ea96a4' // 0% 处的颜色
-					}, {
-							offset: 1,
-							color: '#d14a61' // 100% 处的颜色
-					}], false)],
-
-    yAxis: [{
-        type: 'category',
-        data: [],
-        axisTick: {
-					show: false,
-            alignWithLabel: true
-        }
-    }],
-    xAxis: [{
-			type: 'value',
-			name: '展示',	
-			axisLine: {
-					lineStyle: {color: '#5793f3'}
-			}       
-    },{
-			type: 'value',
-			name: '点击',			
-			position: 'bottom',			
-			offset: 30,
-			axisLine: {
-				lineStyle: { color: '#009a61'}
-			}
-		},{
-			type: 'value',
-			name: '花费',			
-			offset: 10,
-			axisLine: {
-				lineStyle: { color: '#d14a61'}
-			}
-		}],
-    backgroundColor: '#ffffff',
-    series: [{
-        name: '展示',
-        type: 'bar',
-        data: [],
-        label: {
-            normal: {
-                show: true,
-                position: 'insideRight',
-                textStyle: {color: 'white'}
-            }
-        }
-			},{
-				name: '点击',
-        type: 'bar',
-        data: [],
-				xAxisIndex: 1,
-        label: {
-            normal: {
-                show: true,
-                position: 'insideRight',
-                textStyle: {color: 'white'}
-            }
-        }
-    	},{
-				name: '花费',
-        type: 'bar',
-        data: [],
-				xAxisIndex: 2,
-        label: {
-            normal: {
-                show: true,
-                position: 'insideRight',
-                textStyle: {color: 'white'}
-            }
-        }
-    	}]
-	};
-
 class reportMediaPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     };
+
+		this.chartOption = {
+				tooltip: {
+						trigger: 'axis',
+						axisPointer: { // 坐标轴指示器，坐标轴触发有效
+								type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+						}
+				},
+				grid: {
+						left: '3%',
+						right: '50px',
+						bottom: '5%',
+						containLabel: true
+				},
+				legend: {
+						data: ['展示', '点击', '花费']
+				},
+				color: [new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
+									offset: 0,
+									color: 'lightBlue' // 0% 处的颜色
+							}, {
+									offset: 1,
+									color: '#3398DB' // 100% 处的颜色
+							}], false),
+							new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
+									offset: 0,
+									color: 'lightGreen' // 0% 处的颜色
+							}, {
+									offset: 1,
+									color: '#009a61' // 100% 处的颜色
+							}], false), 
+							new Echart.graphic.LinearGradient(0, 0, 1, 0, [{
+									offset: 0,
+									color: '#ea96a4' // 0% 处的颜色
+							}, {
+									offset: 1,
+									color: '#d14a61' // 100% 处的颜色
+							}], false)],
+
+				yAxis: [{
+						type: 'category',
+						data: [],
+						axisTick: {
+							show: false,
+								alignWithLabel: true
+						}
+				}],
+				xAxis: [{
+					type: 'value',
+					name: '展示',	
+					axisLine: {
+							lineStyle: {color: '#5793f3'}
+					}       
+				},{
+					type: 'value',
+					name: '点击',			
+					position: 'bottom',			
+					offset: 30,
+					axisLine: {
+						lineStyle: { color: '#009a61'}
+					}
+				},{
+					type: 'value',
+					name: '花费',			
+					offset: 10,
+					axisLine: {
+						lineStyle: { color: '#d14a61'}
+					}
+				}],
+				backgroundColor: '#ffffff',
+				series: [{
+						name: '展示',
+						type: 'bar',
+						data: [],
+						label: {
+								normal: {
+										show: true,
+										position: 'insideRight',
+										textStyle: {color: 'white'}
+								}
+						}
+					},{
+						name: '点击',
+						type: 'bar',
+						data: [],
+						xAxisIndex: 1,
+						label: {
+								normal: {
+										show: true,
+										position: 'insideRight',
+										textStyle: {color: 'white'}
+								}
+						}
+					},{
+						name: '花费',
+						type: 'bar',
+						data: [],
+						xAxisIndex: 2,
+						label: {
+								normal: {
+										show: true,
+										position: 'insideRight',
+										textStyle: {color: 'white'}
+								}
+						}
+					}]
+			};
   }
 
   componentDidMount(){
@@ -146,12 +146,12 @@ class reportMediaPage extends React.Component {
 
 	setChartData(data){
 
-		option.yAxis[0].data = data.media.reverse();
-		option.series[0].data = data.show.reverse();
-    option.series[1].data = data.click.reverse();
-    option.series[2].data = data.money.reverse();
+		this.chartOption.yAxis[0].data = data.media.reverse();
+		this.chartOption.series[0].data = data.show.reverse();
+    this.chartOption.series[1].data = data.click.reverse();
+    this.chartOption.series[2].data = data.money.reverse();
 
-		this.chart.setOption(option)
+		this.chart.setOption(this.chartOption)
 	}
 
   disabledDate(current) {
@@ -194,7 +194,7 @@ class reportMediaPage extends React.Component {
 
         <ReactEcharts
 					ref='chart'
-          option={option} 
+          option={this.chartOption} 
           notMerge={true}
           lazyUpdate={true}
           style={{height: '600px', width: '100%', marginTop: '20px'}}  
