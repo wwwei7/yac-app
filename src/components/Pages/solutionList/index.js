@@ -27,7 +27,7 @@ class solutionListPage extends React.Component {
       dataIndex: 'start',
     }, {
       title: '结束时间',
-      dataIndex: 'end',
+      render: record => record.end == '2030-12-31' ? '不限' : record.end
     }, {
       title: '日预算',
       dataIndex: 'budget',
@@ -39,13 +39,13 @@ class solutionListPage extends React.Component {
         switch(status){
           case '0 0':
           case '0 1':
-            str = '停投';
+            str = (<b className={'status-stop'}>停投</b>);
             break;
           case '1 1':
-            str = '暂停';
+            str = (<b className={'status-pause'}>暂停</b>);
             break;
           default:
-            str = '正常';
+            str = (<b className={'status-normal'}>正常</b>);
         }
         return str;
       }
