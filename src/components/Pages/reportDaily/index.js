@@ -23,7 +23,7 @@ class reportDailyPage extends React.Component {
         right: '10%'
       },
       toolbox: {
-        right: 50,
+        right: 80,
         itemGap: 15,
         height: 100,
         feature: {
@@ -34,8 +34,7 @@ class reportDailyPage extends React.Component {
         }
       },
       legend: {
-        data:['展示数','点击数','花费']
-        // data:['展示数','点击数']        
+        data:['展示数','点击数','花费','服务费']
       },
       xAxis: [
         {
@@ -73,8 +72,8 @@ class reportDailyPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费',
-          offset: 60,
+          name: '花费/服务费',
+          offset: 50,
           axisLine: {
             lineStyle: {
               color: '#d14a61'
@@ -85,7 +84,7 @@ class reportDailyPage extends React.Component {
           }
         }
       ],
-      color: ['#5793f3', '#009a61', '#d14a61'],
+      color: ['#5793f3', '#009a61', '#d14a61','#f1c300'],
       series: [
         {
           name:'展示数',
@@ -94,12 +93,18 @@ class reportDailyPage extends React.Component {
         },
         {
           name:'点击数',
-          type:'bar',
+          type:'line',
           yAxisIndex: 1,
           data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         },
         {
           name:'花费',
+          type:'bar',
+          yAxisIndex: 2,
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        {
+          name:'服务费',
           type:'bar',
           yAxisIndex: 2,
           data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -159,6 +164,7 @@ class reportDailyPage extends React.Component {
     let showArray = [];
     let clickArray = [];
     let moneyArray = [];
+    let serviceArray = [];
     let maxShow = 0;
     let maxClick = 0;
     let maxMoney = 0;
@@ -168,6 +174,7 @@ class reportDailyPage extends React.Component {
         showArray.push(dayData.show);
         clickArray.push(dayData.click);
         moneyArray.push(dayData.money);
+        serviceArray.push(dayData.service);
 
         maxShow = dayData.show > maxShow ? dayData.show : maxShow;
         maxClick = dayData.click > maxClick ? dayData.click : maxClick;        
@@ -189,6 +196,8 @@ class reportDailyPage extends React.Component {
     this.chartOption.series[0].data = showArray,
     this.chartOption.series[1].data = clickArray;
     this.chartOption.series[2].data = moneyArray;
+    this.chartOption.series[3].data = serviceArray;
+    
     
     this.chart.setOption(this.chartOption)
     
