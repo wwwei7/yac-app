@@ -24,18 +24,14 @@ class Routes extends Component{
             user: null
         }
     }
-
-    getUser() {
-
-    }
-
+    
     render(){
         return (
             <Router path="/" history={hashHistory}>
                 <Route path="/">
-                    <IndexRedirect to="home" />
+                    <IndexRedirect to="agency" />
                 </Route>
-                <Route path="home" component={homePage} onEnter={auth}></Route>
+                <Route path="agency" component={homePage} onEnter={auth}></Route>
                 <Route path="/:aid/reportdaily" component={reportDailyPage} onEnter={auth}></Route>
                 <Route path="/:aid/reporthour" component={reportHourPage} onEnter={auth}></Route>
                 <Route path="/:aid/reportmedia" component={reportMediaPage} onEnter={auth}></Route>                
@@ -43,7 +39,7 @@ class Routes extends Component{
                 <Route path="/:aid/solutionlist" component={solutionListPage} onEnter={auth}></Route>
                 <Route path="/:aid/solution/:sid/edit" component={solutionEditPage} onEnter={auth}></Route>                
                 <Route path="budget" component={budgetPage} onEnter={auth}></Route>
-                <Route path="adinfo" component={adInfoPage} onEnter={auth}></Route>    
+                <Route path="/:aid/adinfo" component={adInfoPage} onEnter={auth}></Route>    
                 <Route path="finance" component={financePage} onEnter={auth}></Route>
                 <Route path="/:aid/bannerlist" component={bannerListPage} onEnter={auth}></Route>                                                                                                                                                                          
                 <Route path="/:aid/bannernew" component={bannerPage} onEnter={auth}></Route>                                                                                                                                                          

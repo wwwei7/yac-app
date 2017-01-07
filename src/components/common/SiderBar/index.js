@@ -77,7 +77,7 @@ class Sider extends React.Component{
         </SubMenu>
 
         <Menu.Item key="adInfoManagement"><Icon type="solution" />
-          <Link to="/adinfo">广告主信息管理</Link>
+          <Link to={`/${this.aid}/adinfo`}>广告主信息管理</Link>
         </Menu.Item>
         
       </Menu>
