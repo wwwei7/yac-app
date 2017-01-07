@@ -96,6 +96,7 @@ let SolutionPage = React.createClass({
         region_type: values.region.type,
         region_value: values.region.value,
         adx: 'baidu',
+        media: values.media,
         start: values.start,
         end: values.end,
         budget: values.budget,

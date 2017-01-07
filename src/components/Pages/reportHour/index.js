@@ -49,8 +49,7 @@ class reportHourPage extends React.Component {
         }
       },
       legend: {
-        data:['展示数','点击数','花费']
-        // data:['展示数','点击数']        
+        data:['展示数','点击数','花费','服务费']    
       },
       xAxis: [
         {
@@ -87,8 +86,8 @@ class reportHourPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费',
-          offset: 60,
+          name: '花费/服务费',
+          offset: 50,
           axisLine: {
             lineStyle: {
               color: '#d14a61'
@@ -99,7 +98,7 @@ class reportHourPage extends React.Component {
           }
         }
       ],
-      color: ['#5793f3', '#009a61', '#d14a61'],
+      color: ['#5793f3', '#009a61', '#d14a61', '#f1c300'],
       series: [
         {
           name:'展示数',
@@ -108,13 +107,19 @@ class reportHourPage extends React.Component {
         },
         {
           name:'点击数',
-          type:'bar',
+          type:'line',
           yAxisIndex: 1,
           data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         },
         {
           name:'花费',
-          type:'line',
+          type:'bar',
+          yAxisIndex: 2,
+          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        },
+        {
+          name:'服务费',
+          type:'bar',
           yAxisIndex: 2,
           data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         }
@@ -172,6 +177,7 @@ class reportHourPage extends React.Component {
     this.chartOption.series[0].data = data.showArr;
     this.chartOption.series[1].data = data.clickArr;
     this.chartOption.series[2].data = data.moneyArr;
+    this.chartOption.series[3].data = data.serviceArr;    
 
     this.chart.setOption(this.chartOption); 
   }
@@ -183,7 +189,8 @@ class reportHourPage extends React.Component {
         hour: i,
         show: data.showArr[i],
         click: data.clickArr[i],
-        money: data.moneyArr[i]
+        money: data.moneyArr[i],
+        service: data.serviceArr[i]
       })
     }
     this.setState({
