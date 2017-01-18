@@ -12,6 +12,9 @@ const getAdvertiser = () => {
 
 const setUser = user => {
   Object.assign(userStore,user);
+  if(user.role == 'advertiser'){
+    setAdvertiser({id: user.advertiserid})
+  }
 }
 
 const setAdvertiser = advertiser => {

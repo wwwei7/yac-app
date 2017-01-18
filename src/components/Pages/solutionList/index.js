@@ -57,13 +57,12 @@ class solutionListPage extends React.Component {
     this.paginBarVisible = this.state.tableData.length> 15;
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.updateTable()
   }
 
   updateTable(){
     const postUrl = `/api/v1/solution/ad/${this.props.params.aid}`;
-
     fetch(postUrl).then(res =>
       res.json()
     ).then(data => {

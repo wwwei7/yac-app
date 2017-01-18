@@ -1,6 +1,6 @@
 import store from './store'
 
-const auth = function(nextState, replace, next){
+export const login = function(nextState, replace, next){
     
     fetch('/action/check',{
         credentials: 'include',
@@ -14,13 +14,45 @@ const auth = function(nextState, replace, next){
             store.setUser(data.user);
             next();
         }else{
-            // alert('need login')
-            // redirect login page
-            window.location = '/';
+            replace({
+                pathname: '/'
+            })
         }
     }).catch(function(e){
         console.log(e)
     })
 }
 
-export default auth;
+export const homeRedirect = function(nextState, replace, next){
+    fetch('/action/check',{
+        credentials: 'include',
+        method: 'GET'
+    }).then(function(res){
+        return res.json()
+    }).then(function(data){
+        if(data.user){
+            // set user object to store            
+            store.setUser(data.user);
+            // redirect            
+            switch(data.user.role){
+                case 'agency':
+                    replace({
+                        pathname: '/agency'
+                    })
+                    break;
+                case 'advertiser':
+                    replace({
+                        pathname: `/${data.user.advertiserid}/solutionlist`
+                    })
+                    break;
+            }
+            next();
+        }else{
+            replace({
+                pathname: '/'
+            })
+        }
+    }).catch(function(e){
+        console.log(e)
+    })
+};

@@ -5,7 +5,8 @@ import style from './style.less';
 import store from '../../../js/store'
 
 const roleMap = {
-  'agency': '代理商用户'
+  'agency': '代理商用户',
+  'advertiser': '广告主用户'
 }
 
 class Header extends React.Component{
@@ -41,7 +42,7 @@ class Header extends React.Component{
     return(
       <div className="header">
         <div className="container clearfix">
-          <Link className="header-logo" to='/home'>Your Ad Cloud</Link>
+          <Link className="header-logo" to='/'>Your Ad Cloud</Link>
           <div className="header-user">
             <span>欢迎：{this.state.user.name}</span>
             <span>{roleMap[this.state.user.role]}</span>            

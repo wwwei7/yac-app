@@ -3,6 +3,7 @@ import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
 import { DatePicker, message, Table } from 'antd';
 import Moment from 'moment';
+import Store from '../../../js/store';
 import map from 'echarts/map/js/china.js';
 import './style.less';
 
@@ -86,7 +87,7 @@ class reportHourPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费/服务费',
+          name: '费用',
           offset: 50,
           axisLine: {
             lineStyle: {
@@ -131,6 +132,9 @@ class reportHourPage extends React.Component {
           handleColor: 'rgba(70,130,180,0.8)'     // 手柄颜色
       }
     }
+
+    this.roleSwitch();
+
   }
 
   componentDidMount(){
@@ -139,6 +143,17 @@ class reportHourPage extends React.Component {
 
     // 渲染报表
     this.renderChart()
+  }
+
+  roleSwitch(){
+    const userRole = this.userRole = Store.getUser().role;
+    // 广告主报表界面
+    if(userRole == 'advertiser'){
+      // 修改图例
+      this.chartOption.legend.data.splice(-1,1);
+      // 去掉服务费轴
+      this.chartOption.series.splice(-1,1);
+    }
   }
 
   computeMaxMark(max){
@@ -177,7 +192,8 @@ class reportHourPage extends React.Component {
     this.chartOption.series[0].data = data.showArr;
     this.chartOption.series[1].data = data.clickArr;
     this.chartOption.series[2].data = data.moneyArr;
-    this.chartOption.series[3].data = data.serviceArr;    
+    if(this.userRole == 'agency')
+      this.chartOption.series[3].data = data.serviceArr;    
 
     this.chart.setOption(this.chartOption); 
   }
@@ -185,13 +201,16 @@ class reportHourPage extends React.Component {
   setTableData(data){
     let tableArr = [];
     for(let i=0;i<24;i++){
-      tableArr.push({
+      let row = {
         hour: i,
         show: data.showArr[i],
         click: data.clickArr[i],
-        money: data.moneyArr[i],
-        service: data.serviceArr[i]
-      })
+        money: data.moneyArr[i]
+      }
+      if(this.userRole != 'advertiser'){
+        row.service = data.serviceArr[i];
+      }
+      tableArr.push(row);
     }
     this.setState({
       tableData: tableArr
@@ -204,7 +223,9 @@ class reportHourPage extends React.Component {
 
     this.chart.showLoading();
 
-    fetch(reportUrl).then(res =>
+    fetch(reportUrl,{
+      credentials: 'include'
+    }).then(res =>
       res.json()
     ).then(data => {
       this.setChartData(data);

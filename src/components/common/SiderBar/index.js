@@ -1,8 +1,9 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
 import { Link } from 'react-router';
-import store from '../../../js/store'
-import style from './style.less';
+import ClassName from 'classnames';
+import store from '../../../js/store';
+import './style.less';
 
 
 const SubMenu = Menu.SubMenu;
@@ -18,6 +19,7 @@ class Sider extends React.Component{
 
   // 设置advertiserID
   componentWillMount(){
+    this.role = store.getUser().role;
     this.aid = store.getAdvertiser().id;
   }
 
@@ -28,6 +30,9 @@ class Sider extends React.Component{
   }
 
   render() {
+    const advertiserForbidden = ClassName({
+      hidden: (this.role=='advertiser')
+    })
     return (
       <Menu onClick={this.handleClick.bind(this)}
         style={{ width: 240 }}
@@ -57,11 +62,13 @@ class Sider extends React.Component{
           </Menu.Item>
         </SubMenu>
 
-        <Menu.Item key="budgetManagement"><Icon type="calculator" />
+        <Menu.Item key="budgetManagement" className={advertiserForbidden}><Icon type="calculator" />
           <Link to="/budget">预算管理</Link>
         </Menu.Item>
 
-        <Menu.Item key="6"><Icon type="team" />DMP人群管理</Menu.Item>
+        <Menu.Item key="dmpManagement"><Icon type="team" />
+          <Link to="/dmp">DMP定向管理</Link>
+        </Menu.Item>
 
         <Menu.Item key="financeManagement"><Icon type="pay-circle-o" />
           <Link to="/finance">财务管理</Link>

@@ -3,7 +3,7 @@ import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
 import { DatePicker, message } from 'antd';
 import Moment from 'moment';
-import map from 'echarts/map/js/china.js';
+import Store from '../../../js/store';
 import './style.less';
 
 const RangePicker = DatePicker.RangePicker;
@@ -72,7 +72,7 @@ class reportDailyPage extends React.Component {
         },
         {
           type: 'value',
-          name: '花费/服务费',
+          name: '费用',
           offset: 50,
           axisLine: {
             lineStyle: {
@@ -117,6 +117,8 @@ class reportDailyPage extends React.Component {
           handleColor: 'rgba(70,130,180,0.8)'     // 手柄颜色
       }
     }
+
+    this.roleSwitch();
   }
 
   componentDidMount(){
@@ -125,6 +127,17 @@ class reportDailyPage extends React.Component {
 
     // 渲染报表
     // this.renderChart()
+  }
+
+  roleSwitch(){
+    const userRole = this.userRole = Store.getUser().role;
+    // 广告主报表界面
+    if(userRole == 'advertiser'){
+      // 修改图例
+      this.chartOption.legend.data.splice(-1,1);
+      // 去掉服务费轴
+      this.chartOption.series.splice(-1,1);
+    }
   }
 
   computeMaxMark(max){
@@ -196,7 +209,8 @@ class reportDailyPage extends React.Component {
     this.chartOption.series[0].data = showArray,
     this.chartOption.series[1].data = clickArray;
     this.chartOption.series[2].data = moneyArray;
-    this.chartOption.series[3].data = serviceArray;
+    if(this.userRole == 'agency')
+      this.chartOption.series[3].data = serviceArray;
     
     
     this.chart.setOption(this.chartOption)
@@ -209,7 +223,9 @@ class reportDailyPage extends React.Component {
 
     this.chart.showLoading();
 
-    fetch(reportUrl).then(res =>
+    fetch(reportUrl,{
+      credentials: 'include'
+    }).then(res =>
       res.json()
     ).then(data => {
       this.setChartData(data);
