@@ -53,6 +53,6 @@ export const homeRedirect = function(nextState, replace, next){
             })
         }
     }).catch(function(e){
-        console.log(e)
+        window.location = '/';
     })
 };

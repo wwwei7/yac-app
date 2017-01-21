@@ -66,8 +66,8 @@ let SolutionPage = React.createClass({
       start: moment(data.start_date,'YYYY-MM-DD'),
       end: data.end_date ? moment(data.end_date,'YYYY-MM-DD') : '',
       region: this.presetRegion(data.region_type, data.region_value),
-      os: data.os.split(','),
-      browser: data.browser.split(',')
+      os: data.os ? data.os.split(',') : [],
+      browser: data.browser ? data.browser.split(',') : []
     }
     return initData;
   },
@@ -290,14 +290,13 @@ let SolutionPage = React.createClass({
               <Select tags
                 style={{ width: '100%' }}
                 placeholder="空为不限"
-                
               >
-                <Option key="1" value="WINDOWS">Windows</Option>
-                <Option key="2" value="MAC_OS">Mac</Option>
-                <Option key="3" value="LINUX">Linux</Option>
-                <Option key="4" value="ANDROID">Android</Option>
-                <Option key="5" value="IOS">Ios</Option>
-                <Option key="6" value="OTHERS">其他</Option>
+                <Option key="o1" value="WINDOWS">Windows</Option>
+                <Option key="o2" value="MAC_OS">Mac</Option>
+                <Option key="o3" value="LINUX">Linux</Option>
+                <Option key="o4" value="ANDROID">Android</Option>
+                <Option key="o5" value="IOS">Ios</Option>
+                <Option key="o6" value="OTHERS">其他</Option>
               </Select>
 
             )}
@@ -312,11 +311,11 @@ let SolutionPage = React.createClass({
                 style={{ width: '100%' }}
                 placeholder="空为不限"
               >
-                <Option key="1" value="IE">IE</Option>
-                <Option key="2" value="CHROME">Chrome</Option>
-                <Option key="3" value="SAFARI">Safari</Option>
-                <Option key="4" value="FIREFOX">Firefox</Option>
-                <Option key="5" value="OTHERS">其他</Option>
+                <Option key="b1" value="IE">IE</Option>
+                <Option key="b2" value="CHROME">Chrome</Option>
+                <Option key="b3" value="SAFARI">Safari</Option>
+                <Option key="b4" value="FIREFOX">Firefox</Option>
+                <Option key="b5" value="OTHERS">其他</Option>
               </Select>
             )}
           </FormItem>
