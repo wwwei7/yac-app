@@ -109,7 +109,7 @@ class Region extends React.Component {
         
         <Radio className="radio-item" key="r3" value={3}>自定义IP地域库</Radio>
         <div className={type==3 ? 'ip' : 'hidden'}>
-            <Input ref="ipInput" type="textarea" placeholder="请使用分号（；）分隔" 
+            <Input ref="ipInput" type="textarea" placeholder="示例：1.1.1.1_1.1.1.10" 
             value={inputValue}
             onChange={this.inputOnChange.bind(this)} />
         </div>

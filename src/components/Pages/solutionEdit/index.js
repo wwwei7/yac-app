@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, DatePicker, InputNumber, Card, Spin, Modal} from 'antd';
+import { Button, Form, Input, DatePicker, InputNumber, Select, Card, Spin, Modal} from 'antd';
 import moment from 'moment';
 import Region from '../../Region';
 import Layout from '../../common/Layout';
@@ -7,6 +7,8 @@ import './style.less';
 
 const createForm = Form.create;
 const FormItem = Form.Item;
+const Option = Select.Option;
+
 
 let SolutionPage = React.createClass({
   getInitialState() {
@@ -19,24 +21,24 @@ let SolutionPage = React.createClass({
   },
 
   handleReset() {
-    this.props.form.resetFields();
+    this.props.form.setFieldsValue(this.initData);
   },
 
   componentDidMount(){
     this.id = this.props.params.sid;
     const url = `/api/v1/solution/${this.id}`;
-    fetch(url).then((res)=>{
-      return res.json();
-    }).then(data=>{
+    fetch(url).then(res =>
+      res.json()
+    ).then(data=>{
       this.setState({
         loading: false
       })
-      let initData = this.presetData(data);
+      let initData = this.initData = this.presetData(data);
       this.props.form.setFieldsValue(initData);
-      // if(data.region)
-        this.setState({
-          region: initData.region
-        })
+      this.setState({
+        region: initData.region,
+        name: initData.name
+      })
     }, err=>{
       alert('Read solution error')
     })
@@ -59,13 +61,13 @@ let SolutionPage = React.createClass({
 
   presetData(data){
     let initData = {
+      ...data,
       name: data.solution_name,
       start: moment(data.start_date,'YYYY-MM-DD'),
       end: data.end_date ? moment(data.end_date,'YYYY-MM-DD') : '',
       region: this.presetRegion(data.region_type, data.region_value),
-      price: data.price,
-      media: data.media,
-      budget: data.budget
+      os: data.os.split(','),
+      browser: data.browser.split(',')
     }
     return initData;
   },
@@ -115,16 +117,19 @@ let SolutionPage = React.createClass({
     const postUrl = '/api/v1/solution/'+ this.id;
 
     const postBody = {
-        advertiser_id: this.props.params.aid,
-        solution_name: values.name,
-        region: values.region,
-        adx: 'baidu',
-        start_date: values.start,
-        end_date: values.end,
-        budget: values.budget,
-        price: values.price,
-        media: values.media
-      };
+      advertiser_id: this.props.params.aid,
+      solution_name: values.name,
+      region_type: values.region.type,
+      region_value: values.region.value,
+      adx: 'baidu',
+      media: values.media,
+      start_date: values.start,
+      end_date: values.end || '2030-12-31',
+      budget: values.budget,
+      os: values.os ? values.os.join(',') : '',
+      browser: values.browser ? values.browser.join(',') : '',
+      price: values.price
+    };
 
     fetch(postUrl,{
       method: 'post',
@@ -144,6 +149,25 @@ let SolutionPage = React.createClass({
     this.setState({
       loading: true
     })
+  },
+
+  nameExists(rule, value, callback) {
+    if (!value) {
+      callback();
+    } else {
+      const url = `/api/v1/solution/${this.props.params.aid}/name/${value}`;
+      fetch(url).then(res =>
+        res.json()
+      ).then(data => {
+        if(!data.solution_name || data.solution_name==this.state.name){
+          callback()
+        }else{
+          callback([new Error(`对不起，名称 ${value} 已经存在`)])
+        }
+      },function(err){
+        console.log(err)
+      })
+    }
   },
 
   saveSuccess(){
@@ -176,7 +200,8 @@ let SolutionPage = React.createClass({
           <FormItem
             {...formItemLayout}
             label="推广计划名称"
-            disabled="true"
+            hasFeedback
+            help={isFieldValidating('name') ? '校验中...' : (getFieldError('name') || []).join(', ')}
           >
             {getFieldDecorator('name', {
               rules: [
@@ -184,7 +209,7 @@ let SolutionPage = React.createClass({
                 { validator: this.nameExists },
               ],
             })(
-              <Input disabled/>
+              <Input />
             )}
           </FormItem>
         
@@ -193,7 +218,6 @@ let SolutionPage = React.createClass({
             label="开始时间"
           >
             {getFieldDecorator('start', {
-              initialValue: moment(),
               rules: [
                 { type: 'object', required: true, message: '开始时间不能为空' }
               ]
@@ -218,10 +242,10 @@ let SolutionPage = React.createClass({
 
           <FormItem
             {...formItemLayout}
-            label="出价设置"
+            label="出价设置（￥元）"
           >
             {getFieldDecorator('price')(
-            <InputNumber min={0} max={10000} step={0.01} />
+            <InputNumber min={0} max={10000} step={1} />
             )}
           </FormItem>
 
@@ -244,7 +268,7 @@ let SolutionPage = React.createClass({
             label="ADX渠道"
             style={{height:80}}
           >
-           <Card style={{ width: 300 }}>
+            <Card style={{ width: 300 }}>
               <p>Baidu</p>
             </Card>
           </FormItem>
@@ -254,13 +278,53 @@ let SolutionPage = React.createClass({
             label="媒体范围"
           >
             {getFieldDecorator('media')(
-              <Input type="textarea" placeholder="请输入域名使用分号；分隔"/>
+              <Input type="textarea" placeholder="示例：163.com,sina.com.cn"/>
             )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
-            label="日预算上限设置"
+            label="操作系统定向"
+          >
+            {getFieldDecorator('os')(
+              <Select tags
+                style={{ width: '100%' }}
+                placeholder="空为不限"
+                
+              >
+                <Option key="1" value="WINDOWS">Windows</Option>
+                <Option key="2" value="MAC_OS">Mac</Option>
+                <Option key="3" value="LINUX">Linux</Option>
+                <Option key="4" value="ANDROID">Android</Option>
+                <Option key="5" value="IOS">Ios</Option>
+                <Option key="6" value="OTHERS">其他</Option>
+              </Select>
+
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label="浏览器定向"
+          >
+            {getFieldDecorator('browser')(
+              <Select tags
+                style={{ width: '100%' }}
+                placeholder="空为不限"
+              >
+                <Option key="1" value="IE">IE</Option>
+                <Option key="2" value="CHROME">Chrome</Option>
+                <Option key="3" value="SAFARI">Safari</Option>
+                <Option key="4" value="FIREFOX">Firefox</Option>
+                <Option key="5" value="OTHERS">其他</Option>
+              </Select>
+            )}
+          </FormItem>
+
+
+          <FormItem
+            {...formItemLayout}
+            label="日预算上限设置（￥元）"
           >
             {getFieldDecorator('budget')(
               <InputNumber min={0} max={10000} step={1} />

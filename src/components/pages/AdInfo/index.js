@@ -178,7 +178,7 @@ class AdInfoForm extends React.Component{
             label="广告落地页白名单"
           >
             {getFieldDecorator('whiteList')(
-              <Input type="textarea" placeholder="请使用分号（；）分隔" id="textarea" name="textarea" />
+              <Input type="textarea" placeholder="请使用逗号（,）分隔" id="textarea" name="textarea" />
             )}
           </FormItem>
 

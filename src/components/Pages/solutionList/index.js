@@ -129,8 +129,6 @@ class solutionListPage extends React.Component {
         sts: 0
       }
     }
-
-
   }
   
   doPause(){

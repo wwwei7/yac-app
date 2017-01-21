@@ -29,27 +29,27 @@ class Dmp extends React.Component{
         <div>
           <Row className="row">
             <Col span={4}>人群定向：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>
           <Row className="row">
             <Col span={4}>DMP标签激活：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>
           <Row className="row">
             <Col span={4}>出价兴趣定向：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>
           <Row className="row">
             <Col span={4}>重定向：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>
           <Row className="row">
             <Col span={4}>猜你喜欢定向：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>
           <Row className="row">
             <Col span={4}>高分人群定向：</Col>
-            <Col span={2}><Switch defaultChecked={false} onChange={this.onChange} /></Col>
+            <Col span={2}><Switch defaultChecked={true} onChange={this.onChange} /></Col>
           </Row>         
         </div>
 

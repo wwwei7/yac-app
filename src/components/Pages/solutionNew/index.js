@@ -10,6 +10,7 @@ import './style.less';
 const createForm = Form.create;
 const FormItem = Form.Item;
 const RadioGroup = Radio.RadioGroup;
+const Option = Select.Option;
 
 
 let SolutionPage = React.createClass({
@@ -97,9 +98,11 @@ let SolutionPage = React.createClass({
         region_value: values.region.value,
         adx: 'baidu',
         media: values.media,
-        start: values.start,
-        end: values.end,
+        start_date: values.start,
+        end_date: values.end || '2030-12-31',
         budget: values.budget,
+        os: values.os ? values.os.join(',') : '',
+        browser: values.browser ? values.browser.join(',') : '',
         price: values.price
       };
 
@@ -229,7 +232,46 @@ let SolutionPage = React.createClass({
             label="媒体范围"
           >
             {getFieldDecorator('media')(
-              <Input type="textarea" placeholder="请输入域名使用分号；分隔"/>
+              <Input type="textarea" placeholder="示例：163.com, sina.com.cn"/>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label="操作系统定向"
+          >
+            {getFieldDecorator('os')(
+              <Select tags
+                style={{ width: '100%' }}
+                placeholder="空为不限"
+                
+              >
+                <Option key="1" value="WINDOWS">Windows</Option>
+                <Option key="2" value="MAC_OS">Mac</Option>
+                <Option key="3" value="LINUX">Linux</Option>
+                <Option key="4" value="ANDROID">Android</Option>
+                <Option key="5" value="IOS">Ios</Option>
+                <Option key="6" value="OTHERS">其他</Option>
+              </Select>
+
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label="浏览器定向"
+          >
+            {getFieldDecorator('browser')(
+              <Select tags
+                style={{ width: '100%' }}
+                placeholder="空为不限"
+              >
+                <Option key="1" value="IE">IE</Option>
+                <Option key="2" value="CHROME">Chrome</Option>
+                <Option key="3" value="SAFARI">Safari</Option>
+                <Option key="4" value="FIREFOX">Firefox</Option>
+                <Option key="5" value="OTHERS">其他</Option>
+              </Select>
             )}
           </FormItem>
 
