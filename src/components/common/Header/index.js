@@ -42,7 +42,7 @@ class Header extends React.Component{
     return(
       <div className="header">
         <div className="container clearfix">
-          <Link className="header-logo" to='/'>Your Ad Cloud</Link>
+          <Link className="header-logo" to='/'></Link>
           <div className="header-user">
             <span>欢迎：{this.state.user.name}</span>
             <span>{roleMap[this.state.user.role]}</span>            

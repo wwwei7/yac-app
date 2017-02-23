@@ -183,7 +183,7 @@ class AdInfoForm extends React.Component{
           </FormItem>
 
           <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-            <Button type="primary" onClick={this.handleSubmit.bind(this)}>更新</Button>
+            {/*<Button type="primary" onClick={this.handleSubmit.bind(this)}>更新</Button>*/}
             &nbsp;&nbsp;&nbsp;
           </FormItem>
         </Form>

@@ -30,7 +30,7 @@ class solutionListPage extends React.Component {
       render: record => record.end == '2030-12-31' ? '不限' : record.end
     }, {
       title: '日预算',
-      dataIndex: 'budget',
+      render: record => record.budget ==0 || !record.budget ? '不限' : record.budget
     }, {
       title: '投放状态',
       render: record => {

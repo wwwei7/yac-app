@@ -91,7 +91,7 @@ class solutionListPage extends React.Component {
 
   save(){
     const name= this.refs.bannerName.refs.input.value || this.state.img.name;
-    const link= this.refs.bannerLocation.refs.input.value;
+    let link= this.refs.bannerLocation.refs.input.value || '';
     const memo= this.refs.bannerMemo.refs.input.value || '';
     const image = this.state.img.url;
     const width = this.state.img.width;
@@ -101,7 +101,8 @@ class solutionListPage extends React.Component {
 
     const postUrl = '/api/v1/banner';
 
-    if(link.trim().length<1){
+    link = link.replace(/ /g,'');
+    if(!link){
       message.error('跳转地址不能为空', 3);
       return false;
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker } from 'antd';
+import { DatePicker, Alert } from 'antd';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
 import Echart from 'echarts';
@@ -199,6 +199,10 @@ class reportMediaPage extends React.Component {
           lazyUpdate={true}
           style={{height: '600px', width: '100%', marginTop: '20px'}}  
           theme={"macarons"} />
+
+				<Alert type="info" showIcon
+					style={{marginLeft:'88px',width: '500px'}}
+					message="当前媒体报表暂时只显示花费TOP10媒体，如需更细媒体数据，请咨询客服" />
       </Layout>
     );
   }

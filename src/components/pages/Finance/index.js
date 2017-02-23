@@ -34,6 +34,7 @@ class FinanceForm extends React.Component{
       loading: false,
       modalVisible: false,
       money: 0,
+      balance: 0.00,
       log: []
     };
   }
@@ -56,7 +57,9 @@ class FinanceForm extends React.Component{
   }
 
   componentDidMount(){
-    this.refreshLog()
+    this.refreshBalance();
+    this.refreshLog();
+    this.role = Store.getUser().role; 
   }
 
   presetData(data){
@@ -65,6 +68,23 @@ class FinanceForm extends React.Component{
       item.opt_time = Moment(item.opt_time).format('YYYY-MM-DD HH:mm:ss');
     })
     return data;
+  }
+
+  //广告主余额刷新
+  refreshBalance(){
+    const balance = `/api/v1/balance/${Store.getAdvertiser().id}`;
+
+    fetch(balance).then(res =>
+      res.json()
+    ).then(data => {
+
+      this.setState({
+        balance: parseFloat(data.money).toFixed(2)
+      })
+
+    },function(err){
+      console.log(err)
+    })
   }
 
   // 充值记录表格刷新
@@ -119,6 +139,8 @@ class FinanceForm extends React.Component{
         modalVisible: false
       })
 
+      this.refreshBalance();
+
       Modal.success({
         title: '充值成功' 
       })
@@ -170,19 +192,24 @@ class FinanceForm extends React.Component{
           <p><b className="red">￥{this.state.money}.00</b> 元</p>
         </Modal>
 
-        <FormItem
-            {...formItemLayout}
-            label="当前广告主充值金额"
-        >
-          <InputNumber value={this.state.money} className="money" min={0} max={100000} step={1} onChange={this.moneyChange.bind(this)}/>
-        </FormItem>
-
-        <div className="opts">
-          <Button type="primary" onClick={this.handleSubmit.bind(this)}>充值</Button>
-          &nbsp;&nbsp;&nbsp;
-          <Button type="ghost" onClick={this.handleReset.bind(this)}>重置</Button>
+        <div className={this.role=="advertiser"?'hidden':''}>
+          <FormItem
+              {...formItemLayout}
+              label="为当前广告主充值金额"
+          >
+            <InputNumber value={this.state.money} className="money" min={0} max={100000} step={1} onChange={this.moneyChange.bind(this)}/>
+          </FormItem>
+          <div className="opts">
+            <Button type="primary" onClick={this.handleSubmit.bind(this)}>充值</Button>
+            &nbsp;&nbsp;&nbsp;
+            <Button type="ghost" onClick={this.handleReset.bind(this)}>重置</Button>
+          </div>
         </div>
 
+
+        <h2 className="balance">当前广告主账户可用余额为：<span>￥{this.state.balance} </span>元</h2>
+
+        <h3>充值历史</h3>
         <div className={logTable}>
           <Table dataSource={this.state.log} columns={logColumns} />
         </div>

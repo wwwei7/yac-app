@@ -19,7 +19,7 @@ export const login = function(nextState, replace, next){
             })
         }
     }).catch(function(e){
-        console.log(e)
+        window.location = '/';
     })
 }
 

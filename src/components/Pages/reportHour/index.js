@@ -1,10 +1,11 @@
 import React from 'react';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import { DatePicker, message, Table } from 'antd';
+import { DatePicker, message, Table, Button } from 'antd';
 import Moment from 'moment';
 import Store from '../../../js/store';
-import map from 'echarts/map/js/china.js';
+import CsvData from '../../../service/reportCsvData'
+import DownloadCsv from '../../../service/createCSV'
 import './style.less';
 
 const columns = [{
@@ -25,6 +26,7 @@ class reportHourPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      csvDisable: true
     };
 
     // 初始化日期
@@ -196,6 +198,9 @@ class reportHourPage extends React.Component {
       this.chartOption.series[3].data = data.serviceArr;    
 
     this.chart.setOption(this.chartOption); 
+    this.setState({
+      csvDisable: false
+    })
   }
   
   setTableData(data){
@@ -222,6 +227,9 @@ class reportHourPage extends React.Component {
     const reportUrl = `/api/v1/report/${this.props.params.aid}/hour/${this.day.format('YYYY-MM-DD')}`;
 
     this.chart.showLoading();
+    this.setState({
+      csvDisable: true
+    })
 
     fetch(reportUrl,{
       credentials: 'include'
@@ -262,6 +270,13 @@ class reportHourPage extends React.Component {
 
   }
 
+  downloadCsvFile(){
+    let head = ['小时段', '展示数', '点击数', '花费'];
+    let text = CsvData(this.userRole, head, this.chartOption.xAxis[0].data, this.chartOption);
+
+    DownloadCsv(text, `${this.day.format('YYYY-MM-DD')}小时报表.csv`);    
+  }
+
   render() {
     let onChartEvents = {
         'click': this.onChartClick,
@@ -278,6 +293,9 @@ class reportHourPage extends React.Component {
               defaultValue={this.day}
               disabledDate={this.disabledDate}
               onChange={this.dateChange.bind(this)} />
+            <span style={{float:'right',marginRight:'20px'}}>
+              <Button type="primary" icon="download" onClick={this.downloadCsvFile.bind(this)} disabled={this.state.csvDisable}>报表CSV下载</Button>
+            </span>
         </div>
         <ReactEcharts
           ref='chart'

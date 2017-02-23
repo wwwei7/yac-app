@@ -1,9 +1,11 @@
 import React from 'react';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Button } from 'antd';
 import Moment from 'moment';
 import Store from '../../../js/store';
+import CsvData from '../../../service/reportCsvData'
+import DownloadCsv from '../../../service/createCSV'
 import './style.less';
 
 const RangePicker = DatePicker.RangePicker;
@@ -12,6 +14,7 @@ class reportDailyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      csvDisable: true
     };
 
     // chart
@@ -212,9 +215,17 @@ class reportDailyPage extends React.Component {
     if(this.userRole == 'agency')
       this.chartOption.series[3].data = serviceArray;
     
-    
-    this.chart.setOption(this.chartOption)
-    
+    this.chart.setOption(this.chartOption);
+    this.setState({
+      csvDisable: false
+    })
+  }
+
+  downloadCsvFile(){
+    let head = ['日期', '展示数', '点击数', '花费'];
+    let text = CsvData(this.userRole, head, this.chartOption.xAxis[0].data, this.chartOption);
+
+    DownloadCsv(text, `${this.start}至${this.end}全天报表.csv`);    
   }
 
   renderChart(){
@@ -222,6 +233,9 @@ class reportDailyPage extends React.Component {
     const reportUrl = `/api/v1/report/${this.props.params.aid}/days/${this.start}t${this.end}`;
 
     this.chart.showLoading();
+    this.setState({
+      csvDisable: true
+    })
 
     fetch(reportUrl,{
       credentials: 'include'
@@ -284,6 +298,9 @@ class reportDailyPage extends React.Component {
                 onChange={this.dateChange.bind(this)}
                 ranges={defaultRanges}
             />
+            <span style={{float:'right',marginRight:'20px'}}>
+              <Button type="primary" icon="download" onClick={this.downloadCsvFile.bind(this)} disabled={this.state.csvDisable}>报表CSV下载</Button>
+            </span>
         </div>
         <ReactEcharts
           ref='chart'

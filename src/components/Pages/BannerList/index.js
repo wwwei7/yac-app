@@ -40,7 +40,7 @@ class bannerListPage extends React.Component {
       render: record => <a href={record.link} target="_blank">{record.link}</a>
     }, {
       title: '操作',
-      render: record => <a data-bid={record.id} onClick={this.delete.bind(this)}>删除</a>
+      render: record => <a data-bid={record.id} onClick={this.delete.bind(this)} disabled>删除</a>
     }];
   }
 
@@ -91,10 +91,10 @@ class bannerListPage extends React.Component {
 
   delete(e){
     console.log(e.target.dataset.bid)
-    Modal.warning({
-      title: '功能马上做!',
-      content: '',
-    });
+    // Modal.warning({
+    //   title: '功能马上做!',
+    //   content: '',
+    // });
   }
 
   render() {

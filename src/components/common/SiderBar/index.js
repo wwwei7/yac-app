@@ -70,7 +70,7 @@ class Sider extends React.Component{
           <Link to="/dmp">DMP定向管理</Link>
         </Menu.Item>
 
-        <Menu.Item key="financeManagement" className={advertiserForbidden}><Icon type="pay-circle-o" />
+        <Menu.Item key="financeManagement"><Icon type="pay-circle-o" />
           <Link to="/finance">财务管理</Link>
         </Menu.Item>
 

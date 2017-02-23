@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, DatePicker, InputNumber, Select, Card, Spin, Modal} from 'antd';
+import { Button, Form, Input, DatePicker, InputNumber, Select, Card, Spin, Modal, Alert} from 'antd';
 import moment from 'moment';
 import Region from '../../Region';
 import Layout from '../../common/Layout';
@@ -263,7 +263,7 @@ let SolutionPage = React.createClass({
          
           </FormItem>
 
-          <FormItem
+          {/*<FormItem
             {...formItemLayout}
             label="ADX渠道"
             style={{height:80}}
@@ -271,7 +271,7 @@ let SolutionPage = React.createClass({
             <Card style={{ width: 300 }}>
               <p>Baidu</p>
             </Card>
-          </FormItem>
+          </FormItem>*/}
 
           <FormItem
             {...formItemLayout}
@@ -328,6 +328,8 @@ let SolutionPage = React.createClass({
             {getFieldDecorator('budget')(
               <InputNumber min={0} max={10000} step={1} />
             )}
+            <Alert type="warning" showIcon style={{display:'inline-block'}}
+              message="空为不限" />
           </FormItem>
 
           <FormItem wrapperCol={{ span: 12, offset: 7 }}>
