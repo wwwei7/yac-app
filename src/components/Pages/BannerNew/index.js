@@ -1,8 +1,9 @@
 import React from 'react';
 import Layout from '../../common/Layout';
-import { Steps, Upload, Icon, Modal, Button, Alert, Spin, Input, message } from 'antd';
+import { Steps, Upload, Icon, Modal, Button, Alert, Spin, Input, message, Table, Row, Col } from 'antd';
 import classNames from 'classnames';
 import Store from '../../../js/store';
+import BannerListEditor from './bannerListEditor'
 import style from './style.less';
 
 const Step = Steps.Step;
@@ -13,7 +14,8 @@ class solutionListPage extends React.Component {
   constructor(props) {
     super(props);
 
-    var self = this;
+    const self = this;
+    let uploadTimer;
 
     this.state = {
       step: 0,
@@ -22,11 +24,15 @@ class solutionListPage extends React.Component {
       curSul: '',
       nodata: false,
       uploading: false,
-      uploading3: false
+      uploading3: false,
+      fileList: [], //当前上传的所有文件
+      uploadedList: [], //上传成功的所有文件
+      uploadedFailList: [] //上传失败的所有文件
     };
 
     this.fileUp = {
-      showUploadList: false,
+      showUploadList: true,
+      multiple: true,
       action: '/action/upload',
       accept: '.jpg,.png,.gif',
       beforeUpload() {
@@ -37,27 +43,79 @@ class solutionListPage extends React.Component {
         })
       },
       onChange(info) {
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
+        let fileList = info.fileList;
+
+        let successList = fileList.filter((file) => {
+          if (file.response) {
+            file.url = file.response.url;
+            file.width = file.response.width;
+            file.height = file.response.height;
+            file.dimension = file.response.dimension;
+            return file.response.status === 'success';
+          }
+          
+          return true;
+        });
+
+        let failList = fileList.filter((file)=>{
+          if (file.response){
+            file.dimension = file.response.dimension;            
+            return file.response.status !== 'success';                          
+          }
+          return true;
+        })
+
+        self.setState({fileList: fileList})
+        self.setState({uploadedList: successList})
+        self.setState({uploadedFailList: failList})
+        
+        if(uploadTimer){
+          clearTimeout(uploadTimer)
         }
-        if (info.file.status === 'done') {
-          self.setState({
-            step: 2,
-            img: info.file.response,
-            uploading: false
+        uploadTimer = setTimeout(()=>{
+          let loadingEnd = self.state.fileList.every(file => {
+            return file.status != 'uploading'
           })
-        } else if (info.file.status === 'error') {
-          Modal.error({
-            title: `${info.file.name} 文件上传失败`,
-            content: info.file.response.msg,
-          });
-          self.setState({
-            uploading: false
-          })
-        }
+          if(loadingEnd){
+            self.setState({
+              uploading: false
+            })
+            if(self.state.uploadedList.length>0){
+              self.setState({
+                step: 2
+              })
+            }
+            else{
+              self.uploadErrModal();
+            }            
+          }
+        },500)
       },
     };
 
+  }
+
+  initUploadState(){
+    this.setState({
+      fileList: [], //当前上传的所有文件
+      uploadedList: [], //上传成功的所有文件
+      uploadedFailList: [] //上传失败的所有文件
+    })
+  }
+
+  uploadErrModal(){
+    let failList = [],
+        self = this;
+    failList = this.state.uploadedFailList.map(file=>{
+      return file.dimension
+    })
+    Modal.error({
+      title: `尺寸为：${failList.join('、')} ，上传失败`,
+      okText: '重新上传创意素材',
+      onOk() {
+        self.initUploadState();
+      },
+    })
   }
 
   componentDidMount(){
@@ -86,26 +144,61 @@ class solutionListPage extends React.Component {
   }
 
   toStep2(){
+    this.initUploadState();
     this.setState({step: 1})        
   }
 
+  getPostBanerData(sid, aid){
+    const list = this.state.uploadedList;
+    const len=list.length;
+    const urlRegex = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi); 
+    let arr = [], 
+        fileItem,
+        i = 0,
+        sizeKey={};
+    for(;i<len;i++){
+      fileItem = list[i];
+      const link = fileItem.clickUrl || '';
+      if(link.trim().length==0)
+        return {err: '点击地址不能为空', index: i, content: `第${i+1}行，尺寸为${fileItem.dimension}的创意`}
+      if(!link.trim().match(urlRegex))
+        return {err: '错误的点击地址', index: i, content: `第${i+1}行，尺寸为${fileItem.dimension}的创意`}
+      if(sizeKey[fileItem.dimension]){
+        return {err: '重复的素材尺寸', index: i, content: `第${i+1}行与第${sizeKey[fileItem.dimension].index+1}行，尺寸都为${fileItem.dimension}，请删除一项或重新上传`}
+      }
+      sizeKey[fileItem.dimension] = {index: i};
+
+      arr.push([
+        fileItem.name.trim(),
+        link.trim(),
+        String(fileItem.width),
+        String(fileItem.height),
+        fileItem.url,
+        fileItem.memo,
+        aid,
+        sid
+      ])
+    }
+
+    return arr;
+  }
+
   save(){
-    const name= this.refs.bannerName.refs.input.value || this.state.img.name;
-    let link= this.refs.bannerLocation.refs.input.value || '';
-    const memo= this.refs.bannerMemo.refs.input.value || '';
-    const image = this.state.img.url;
-    const width = this.state.img.width;
-    const height = this.state.img.height;
+
     const solutionid = this.sid;
     const advertiserid = Store.getAdvertiser().id;
-
-    const postUrl = '/api/v1/banner';
-
-    link = link.replace(/ /g,'');
-    if(!link){
-      message.error('跳转地址不能为空', 3);
+    const postData = this.getPostBanerData(solutionid, advertiserid)
+    const self = this;
+    
+    if(postData.err){
+      Modal.error({
+        title: postData.err,
+        content: postData.content
+      })
       return false;
     }
+
+    const postUrl = '/api/v1/banner';
 
     this.setState({
       uploading3: true
@@ -117,22 +210,28 @@ class solutionListPage extends React.Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({name, link, memo, image, width, height, solutionid, advertiserid})
-    }).then(res => {
-      if(res.ok){
+      body: JSON.stringify(postData)
+    }).then(res => res.json()
+    ).then(data=>{
+      if(data.status=="200"){
         this.setState({
           uploading3: false
         });
-        this.refs.bannerName.refs.input.value = '';
-        this.refs.bannerLocation.refs.input.value = '';
-        this.refs.bannerMemo.refs.input.value = '';
-
-        const self = this;
 
         Modal.success({
-          title: `创意素材：${name} 保存成功！`,
+          title: `创意素材保存成功！`,
           okText: '继续上传创意素材',
           onOk() {
+            self.initUploadState();
+            self.toStep2();
+          },
+        });
+      }else{
+        Modal.error({
+          title: `创意素材保存失败！`,
+          okText: '重新上传创意素材',
+          onOk() {
+            self.initUploadState();
             self.toStep2();
           },
         });
@@ -148,6 +247,12 @@ class solutionListPage extends React.Component {
     const curSul = e.target.innerHTML;
     this.sid = e.target.dataset.sid;
     this.setState({step, curSul})    
+  }
+
+  updateFileList(uploadedList){
+    this.setState({
+      uploadedList
+    })
   }
 
 
@@ -217,7 +322,7 @@ class solutionListPage extends React.Component {
           </ul>
           
           <div className="fileup">
-            <Dragger {...this.fileUp}>
+            <Dragger {...this.fileUp} fileList={this.state.fileList}>
               <p className="ant-upload-drag-icon">
                 <Icon type="inbox" />
               </p>
@@ -233,53 +338,36 @@ class solutionListPage extends React.Component {
             tip='正在保存...'
             >
           <section className="title">
-            <Alert 
-              message="图片上传成功，请继续完善下列信息"
-              description={`宽度: ${this.state.img.width}px 高度: ${this.state.img.height}px`}
+            {
+              this.state.uploadedFailList.length > 0 && 
+              <Alert
+                message = {`上传失败文件尺寸：${this.state.uploadedFailList.map(file=>file.dimension).join('、')}`}       
+                type="error"
+                showIcon
+              />
+            }
+            <Alert
+              message = {`上传成功文件尺寸：${this.state.uploadedList.map(file=>file.dimension).join('、')}`}
+              description = "请继续完善下列信息"          
               type="success"
               showIcon
               />
           </section>
 
-          <section className="imgct">
-            <img width={this.state.img.width} 
-              height={this.state.img.height}
-              src={this.state.img.url} />
-          </section>
-
           <section className="banner-form">
-            <div className="ant-row ant-form-item">
-              <div className="ant-col-3 ant-form-item-label">
-                <label>创意名称</label>
-              </div>
-              <div className="ant-col-10">              
-                <Input ref="bannerName" placeholder={"默认：" + this.state.img.name} />
-              </div>
-            </div>
-
-            <div className="ant-row ant-form-item">
-              <div className="ant-col-3 ant-form-item-label">
-                <label className="ant-form-item-required">跳转地址</label>
-              </div>
-              <div className="ant-col-10">              
-                <Input ref="bannerLocation" placeholder="请输入广告点击跳转URL"/>
-              </div>
-            </div>
-
-            <div className="ant-row ant-form-item">
-              <div className="ant-col-3 ant-form-item-label">
-                <label>备注</label>
-              </div>
-              <div className="ant-col-10">              
-                <Input ref="bannerMemo"  placeholder="备注或描述信息"/>
-              </div>
-            </div>
+            <BannerListEditor 
+              fileList={this.state.uploadedList}
+              updateFileList={this.updateFileList.bind(this)}/>
           </section>
 
           <section className="opts">
+            <Button size="large"
+              onClick={this.toStep2.bind(this)}>
+              返回
+            </Button>
             <Button type="primary" size="large"
               onClick={this.save.bind(this)}>
-              保存<Icon type="right" />
+              保存
             </Button>
           </section>
           </Spin>
