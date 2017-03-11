@@ -26,7 +26,7 @@ class SolutionSelect extends React.Component{
   }
 
   onSelect(value, option){
-    this.props.onSelect(value);
+    this.props.onSelect(value, option);
   }
 
   getOptions(){

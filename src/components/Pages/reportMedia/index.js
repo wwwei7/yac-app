@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker, Alert } from 'antd';
+import { DatePicker, Alert, Table} from 'antd';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
 import Echart from 'echarts';
@@ -7,6 +7,23 @@ import Moment from 'moment';
 import './style.less';
 
 const RangePicker = DatePicker.RangePicker;
+
+let columns = [{
+  title: '媒体',
+  dataIndex: 'media'
+}, {
+  title: '点击数',
+  dataIndex: 'click',
+  sorter: (a, b) => a.click - b.click
+}, {
+  title: '展示数',
+  dataIndex: 'show',
+  sorter: (a, b) => a.show - b.show
+}, {
+  title: '花费',
+  dataIndex: 'money',
+  sorter: (a, b) => a.money - b.money
+}];
 
 class reportMediaPage extends React.Component {
   constructor(props) {
@@ -125,10 +142,16 @@ class reportMediaPage extends React.Component {
   componentDidMount(){
     // 初始化echart实例
     this.chart = this.refs.chart.getEchartsInstance();
+
+		// 默认显示昨天报表数据
+		const yesterday = Moment().format('YYYY-MM-DD')
+    this.setDay([yesterday, yesterday])
+
+    // 渲染报表
+    this.renderChart()
   }
 
   renderChart(){
-
     const reportUrl = `/api/v1/report/${this.props.params.aid}/media/${this.start}t${this.end}`;
 
     this.chart.showLoading('default',{text:'加载中...'});
@@ -136,6 +159,7 @@ class reportMediaPage extends React.Component {
     fetch(reportUrl).then(res =>
       res.json()
     ).then(data => {
+			this.setTableData(data);
       this.setChartData(data);
       this.chart.hideLoading();      
     },function(err){
@@ -145,13 +169,35 @@ class reportMediaPage extends React.Component {
   }
 
 	setChartData(data){
-
 		this.chartOption.yAxis[0].data = data.media.reverse();
 		this.chartOption.series[0].data = data.show.reverse();
     this.chartOption.series[1].data = data.click.reverse();
     this.chartOption.series[2].data = data.money.reverse();
 
 		this.chart.setOption(this.chartOption)
+	}
+	
+	setTableData(data){
+		let tableArr = [], noData;
+		for(let i=0;i<10;i++){
+			let rowObj = {};
+			for(let key in data){
+				let val = data[key][i];
+				if(!val){
+					noData = true;
+					break;
+				}
+				rowObj[key] = val;
+				rowObj.key = i;
+			}
+			if(noData){
+				break;
+			}
+			tableArr.push(rowObj)
+		}
+		this.setState({
+      tableData: tableArr
+    });
 	}
 
   disabledDate(current) {
@@ -189,6 +235,7 @@ class reportMediaPage extends React.Component {
                 disabledDate={this.disabledDate}
                 onChange={this.dateChange.bind(this)}
                 ranges={defaultRanges}
+								defaultValue={[Moment().subtract(1,'days'), Moment().subtract(1,'days')]}
             />
         </div>
 
@@ -201,8 +248,13 @@ class reportMediaPage extends React.Component {
           theme={"macarons"} />
 
 				<Alert type="info" showIcon
-					style={{marginLeft:'88px',width: '500px'}}
-					message="当前媒体报表暂时只显示花费TOP10媒体，如需更细媒体数据，请咨询客服" />
+					style={{marginLeft:'88px',width: '800px'}}
+					message="当前媒体报表暂时只显示花费TOP10媒体，默认按照展示数从高到低排序，如需更多媒体数据，请咨询客服" />
+
+				<Table
+          pagination={false}
+          columns={columns}
+          dataSource={this.state.tableData}/>
       </Layout>
     );
   }

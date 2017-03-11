@@ -14,18 +14,23 @@ const RangePicker = DatePicker.RangePicker;
 let columns = [{
   title: '日期',
   dataIndex: 'day',
+  sorter: (a, b) => a.day.replace(/-/g,'') - b.day.replace(/-/g,'')
 }, {
   title: '点击数',
   dataIndex: 'click',
+  sorter: (a, b) => a.click - b.click
 }, {
   title: '展示数',
   dataIndex: 'show',
+  sorter: (a, b) => a.show - b.show
 }, {
   title: '花费',
   dataIndex: 'money',
+  sorter: (a, b) => a.money - b.money
 }, {
   title: '服务费',
-  dataIndex: 'service'
+  dataIndex: 'service',
+  sorter: (a, b) => a.service - b.service
 }];
 
 class reportDailyPage extends React.Component {
@@ -149,6 +154,9 @@ class reportDailyPage extends React.Component {
     // 默认显示昨天报表数据
     const yesterday = Moment().subtract(1, 'days').format('YYYY-MM-DD');
     this.setDay([yesterday, yesterday])
+    
+    // 默认显示所有推广计划
+    this.solution = {id: '0', name: '* 所有推广计划 *'}
 
     // 渲染报表
     this.renderChart()
@@ -266,15 +274,15 @@ class reportDailyPage extends React.Component {
   }
 
   downloadCsvFile(){
-    let head = ['日期', '展示数', '点击数', '花费'];
-    let text = CsvData(this.userRole, head, this.chartOption.xAxis[0].data, this.chartOption);
+    const head = ['日期', '推广计划名称', '展示数', '点击数', '花费'];
+    const text = CsvData(this.userRole, head, this.solution.name, this.chartOption.xAxis[0].data, this.chartOption);
 
     DownloadCsv(text, `${this.start}至${this.end}全天报表.csv`);    
   }
 
   renderChart(){
     const daysQuery = `${this.start}t${this.end}`;
-    const solutionQeury = this.solution ? this.solution :'';
+    const solutionQeury = this.solution.id != '0' ? this.solution.id :'';
     const reportUrl = `/api/v1/report/${this.props.params.aid}/days/${daysQuery}/${solutionQeury}`;
 
     this.chart.showLoading();
@@ -310,12 +318,14 @@ class reportDailyPage extends React.Component {
     this.renderChart()
   }
 
-  solutionChange(sid){
-    if(sid === this.solution)
+  solutionChange(value, option){
+    if(value === this.solution.id)
       return;
-    if(sid === "0")
-      sid = undefined;
-    this.solution = sid;
+
+    this.solution = {
+      id: value,
+      name: option.props.name
+    };
 
     this.renderChart()
   }
@@ -359,7 +369,7 @@ class reportDailyPage extends React.Component {
           </div>
           <div className='query-solution'>
             <label>推广计划：</label>
-            <SolutionSelect 
+            <SolutionSelect
               width='281px'
               aid={this.props.params.aid} 
               includeAll={true}

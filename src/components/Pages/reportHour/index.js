@@ -10,20 +10,25 @@ import DownloadCsv from '../../../service/createCSV'
 import './style.less';
 
 let columns = [{
-  title: '小时段',
+  title: '日期',
   dataIndex: 'hour',
+  sorter: (a, b) => a.hour - b.hour
 }, {
   title: '点击数',
   dataIndex: 'click',
+  sorter: (a, b) => a.click - b.click
 }, {
   title: '展示数',
   dataIndex: 'show',
+  sorter: (a, b) => a.show - b.show
 }, {
   title: '花费',
   dataIndex: 'money',
+  sorter: (a, b) => a.money - b.money
 }, {
   title: '服务费',
-  dataIndex: 'service'
+  dataIndex: 'service',
+  sorter: (a, b) => a.service - b.service
 }];
 
 class reportHourPage extends React.Component {
@@ -147,6 +152,9 @@ class reportHourPage extends React.Component {
   componentDidMount(){
     // 初始化echart实例
     this.chart = this.refs.chart.getEchartsInstance();
+    
+    // 默认显示所有推广计划
+    this.solution = {id: '0', name: '* 所有推广计划 *'}
 
     // 渲染报表
     this.renderChart()
@@ -231,7 +239,7 @@ class reportHourPage extends React.Component {
   }
 
   renderChart(){
-    const solutionQeury = this.solution ? this.solution :'';
+    const solutionQeury = this.solution.id != '0' ? this.solution.id :'';
     const reportUrl = `/api/v1/report/${this.props.params.aid}/hour/${this.day.format('YYYY-MM-DD')}/${solutionQeury}`;
 
     this.chart.showLoading();
@@ -270,12 +278,13 @@ class reportHourPage extends React.Component {
     return current && current.valueOf() > Date.now();
   }
 
-  solutionChange(sid){
-    if(sid === this.solution)
+  solutionChange(value, option){
+    if(value === this.solution.id)
       return;
-    if(sid === "0")
-      sid = undefined;
-    this.solution = sid;
+    this.solution = {
+      id: value,
+      name: option.props.name
+    };
 
     this.renderChart()
   }
@@ -289,8 +298,8 @@ class reportHourPage extends React.Component {
   }
 
   downloadCsvFile(){
-    let head = ['小时段', '展示数', '点击数', '花费'];
-    let text = CsvData(this.userRole, head, this.chartOption.xAxis[0].data, this.chartOption);
+    let head = ['小时段', '推广计划名称', '展示数', '点击数', '花费'];
+    let text = CsvData(this.userRole, head, this.solution.name, this.chartOption.xAxis[0].data, this.chartOption);
 
     DownloadCsv(text, `${this.day.format('YYYY-MM-DD')}小时报表.csv`);    
   }
