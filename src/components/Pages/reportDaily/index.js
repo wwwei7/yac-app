@@ -1,14 +1,32 @@
 import React from 'react';
 import Layout from '../../common/Layout';
 import ReactEcharts from 'echarts-for-react';
-import { DatePicker, message, Button } from 'antd';
+import { DatePicker, message, Button, Table } from 'antd';
 import Moment from 'moment';
 import Store from '../../../js/store';
+import SolutionSelect from '../../SolutionSelect'
 import CsvData from '../../../service/reportCsvData'
 import DownloadCsv from '../../../service/createCSV'
 import './style.less';
 
 const RangePicker = DatePicker.RangePicker;
+
+let columns = [{
+  title: '日期',
+  dataIndex: 'day',
+}, {
+  title: '点击数',
+  dataIndex: 'click',
+}, {
+  title: '展示数',
+  dataIndex: 'show',
+}, {
+  title: '花费',
+  dataIndex: 'money',
+}, {
+  title: '服务费',
+  dataIndex: 'service'
+}];
 
 class reportDailyPage extends React.Component {
   constructor(props) {
@@ -128,8 +146,12 @@ class reportDailyPage extends React.Component {
     // 初始化echart实例
     this.chart = this.refs.chart.getEchartsInstance();
 
+    // 默认显示昨天报表数据
+    const yesterday = Moment().subtract(1, 'days').format('YYYY-MM-DD');
+    this.setDay([yesterday, yesterday])
+
     // 渲染报表
-    // this.renderChart()
+    this.renderChart()
   }
 
   roleSwitch(){
@@ -140,6 +162,8 @@ class reportDailyPage extends React.Component {
       this.chartOption.legend.data.splice(-1,1);
       // 去掉服务费轴
       this.chartOption.series.splice(-1,1);
+      // 表格去掉服务费
+      columns.pop();
     }
   }
 
@@ -221,6 +245,26 @@ class reportDailyPage extends React.Component {
     })
   }
 
+  setTableData(data){
+    let tableArr = [];
+    for(let day in data){
+      let row = {
+        key: day,
+        day: day,
+        show: data[day].show,
+        click:  data[day].click,
+        money:  data[day].money
+      }
+      if(this.userRole != 'advertiser'){
+        row.service =  data[day].service;
+      }
+      tableArr.push(row);
+    }
+    this.setState({
+      tableData: tableArr
+    })
+  }
+
   downloadCsvFile(){
     let head = ['日期', '展示数', '点击数', '花费'];
     let text = CsvData(this.userRole, head, this.chartOption.xAxis[0].data, this.chartOption);
@@ -229,8 +273,9 @@ class reportDailyPage extends React.Component {
   }
 
   renderChart(){
-
-    const reportUrl = `/api/v1/report/${this.props.params.aid}/days/${this.start}t${this.end}`;
+    const daysQuery = `${this.start}t${this.end}`;
+    const solutionQeury = this.solution ? this.solution :'';
+    const reportUrl = `/api/v1/report/${this.props.params.aid}/days/${daysQuery}/${solutionQeury}`;
 
     this.chart.showLoading();
     this.setState({
@@ -243,6 +288,7 @@ class reportDailyPage extends React.Component {
       res.json()
     ).then(data => {
       this.setChartData(data);
+      this.setTableData(data);
       this.chart.hideLoading();      
     },function(err){
       message.error('获取报表数据失败', 4);
@@ -261,6 +307,16 @@ class reportDailyPage extends React.Component {
 
     this.setDay(days);
     
+    this.renderChart()
+  }
+
+  solutionChange(sid){
+    if(sid === this.solution)
+      return;
+    if(sid === "0")
+      sid = undefined;
+    this.solution = sid;
+
     this.renderChart()
   }
 
@@ -292,15 +348,27 @@ class reportDailyPage extends React.Component {
         <h1 className='page-title'>全天报表</h1>
         
         <div className='query-container'>
-            <label>请选择日期范围：</label>
-            <RangePicker 
+          <div className='query-date'>
+            <label>日期范围：</label>
+            <RangePicker
                 disabledDate={this.disabledDate}
                 onChange={this.dateChange.bind(this)}
                 ranges={defaultRanges}
+                defaultValue={[Moment().subtract(1,'days'), Moment().subtract(1,'days')]}
             />
-            <span style={{float:'right',marginRight:'20px'}}>
-              <Button type="primary" icon="download" onClick={this.downloadCsvFile.bind(this)} disabled={this.state.csvDisable}>报表CSV下载</Button>
-            </span>
+          </div>
+          <div className='query-solution'>
+            <label>推广计划：</label>
+            <SolutionSelect 
+              width='281px'
+              aid={this.props.params.aid} 
+              includeAll={true}
+              onSelect={this.solutionChange.bind(this)}
+            />
+          </div>
+          <Button type="primary" icon="download" className="btn-csv"
+            onClick={this.downloadCsvFile.bind(this)} 
+            disabled={this.state.csvDisable}>报表CSV下载</Button>
         </div>
         <ReactEcharts
           ref='chart'
@@ -311,6 +379,11 @@ class reportDailyPage extends React.Component {
           style={{height: '450px', width: '100%', marginTop: '20px'}} 
           onChartReady={this.onChartReadyCallback}
           onEvents={onChartEvents} />
+
+        <Table
+          pagination={false}
+          columns={columns}
+          dataSource={this.state.tableData}/>
         
       </Layout>
     );

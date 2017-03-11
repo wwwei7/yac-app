@@ -4,11 +4,12 @@ import ReactEcharts from 'echarts-for-react';
 import { DatePicker, message, Table, Button } from 'antd';
 import Moment from 'moment';
 import Store from '../../../js/store';
+import SolutionSelect from '../../SolutionSelect'
 import CsvData from '../../../service/reportCsvData'
 import DownloadCsv from '../../../service/createCSV'
 import './style.less';
 
-const columns = [{
+let columns = [{
   title: '小时段',
   dataIndex: 'hour',
 }, {
@@ -20,6 +21,9 @@ const columns = [{
 }, {
   title: '花费',
   dataIndex: 'money',
+}, {
+  title: '服务费',
+  dataIndex: 'service'
 }];
 
 class reportHourPage extends React.Component {
@@ -29,8 +33,9 @@ class reportHourPage extends React.Component {
       csvDisable: true
     };
 
-    // 初始化日期
-    this.day = Moment().subtract(1, 'days');    
+    // 默认显示当天数据
+    // this.day = Moment().subtract(1, 'days');
+    this.day = Moment();    
 
     // chart
     this.chartOption = {
@@ -155,6 +160,8 @@ class reportHourPage extends React.Component {
       this.chartOption.legend.data.splice(-1,1);
       // 去掉服务费轴
       this.chartOption.series.splice(-1,1);
+      // 表格去掉服务费
+      columns.pop();
     }
   }
 
@@ -207,6 +214,7 @@ class reportHourPage extends React.Component {
     let tableArr = [];
     for(let i=0;i<24;i++){
       let row = {
+        key: 'hour'+i,
         hour: i,
         show: data.showArr[i],
         click: data.clickArr[i],
@@ -223,8 +231,8 @@ class reportHourPage extends React.Component {
   }
 
   renderChart(){
-
-    const reportUrl = `/api/v1/report/${this.props.params.aid}/hour/${this.day.format('YYYY-MM-DD')}`;
+    const solutionQeury = this.solution ? this.solution :'';
+    const reportUrl = `/api/v1/report/${this.props.params.aid}/hour/${this.day.format('YYYY-MM-DD')}/${solutionQeury}`;
 
     this.chart.showLoading();
     this.setState({
@@ -262,6 +270,16 @@ class reportHourPage extends React.Component {
     return current && current.valueOf() > Date.now();
   }
 
+  solutionChange(sid){
+    if(sid === this.solution)
+      return;
+    if(sid === "0")
+      sid = undefined;
+    this.solution = sid;
+
+    this.renderChart()
+  }
+
   onChartClick(e){
 
   }
@@ -287,15 +305,26 @@ class reportHourPage extends React.Component {
         <h1 className='page-title'>小时报表</h1>
         
         <div className='query-container'>
-            <label>请选择要查看的报表日期：</label>
+          <div className='query-date'>
+            <label>选择日期：</label>
             <DatePicker 
               showToday={false}
               defaultValue={this.day}
               disabledDate={this.disabledDate}
               onChange={this.dateChange.bind(this)} />
-            <span style={{float:'right',marginRight:'20px'}}>
-              <Button type="primary" icon="download" onClick={this.downloadCsvFile.bind(this)} disabled={this.state.csvDisable}>报表CSV下载</Button>
-            </span>
+          </div>
+          <div className='query-solution'>
+            <label>推广计划：</label>
+            <SolutionSelect 
+              width='200px'
+              aid={this.props.params.aid} 
+              includeAll={true}
+              onSelect={this.solutionChange.bind(this)}
+            />
+          </div>
+          <Button type="primary" icon="download" className="btn-csv"
+            onClick={this.downloadCsvFile.bind(this)} 
+            disabled={this.state.csvDisable}>报表CSV下载</Button>
         </div>
         <ReactEcharts
           ref='chart'
@@ -303,12 +332,14 @@ class reportHourPage extends React.Component {
           notMerge={true}
           lazyUpdate={true}
           theme={"theme_name"}
-          style={{height: '450px', width: '100%'}} 
+          style={{height: '450px', width: '100%', marginTop: '20px'}} 
           onChartReady={this.onChartReadyCallback}
           onEvents={onChartEvents} />
 
         <Table
-            columns={columns} dataSource={this.state.tableData}/>
+          pagination={false}
+          columns={columns}
+          dataSource={this.state.tableData}/>
         
       </Layout>
     );
