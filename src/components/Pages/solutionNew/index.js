@@ -58,6 +58,13 @@ let SolutionPage = React.createClass({
     }
   },
 
+  priceValidate(rule, val, callback){
+    if(val<0)
+      callback([new Error(`出价设置不能小于0元`)])
+    else
+      callback()
+  },
+
   setRegion(val){
     this.props.form.setFieldsValue({
       region: val
@@ -200,7 +207,12 @@ let SolutionPage = React.createClass({
             {...formItemLayout}
             label="出价设置"
           >
-            {getFieldDecorator('price')(
+            {getFieldDecorator('price',{
+              rules: [
+                { required: true, message: '出价不能为空' },
+                { validator: this.priceValidate },
+              ],
+            })(
             <InputNumber min={0} max={10000} step={0.01} />
             )}
           </FormItem>

@@ -70,8 +70,9 @@ class bannerListPage extends React.Component {
 
   tableDataFilter(data){
     let table = [];
-    data.map(item => {
+    data.map((item,i) => {
       table.push({
+        key: `bl${i}`,
         id: item.ID,
         sid: item.solutionid,
         name: item.name,

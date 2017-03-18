@@ -85,8 +85,9 @@ class solutionListPage extends React.Component {
 
   tableDataFilter(data){
     let table = [];
-    data.map(item => {
+    data.map((item,i) => {
       table.push({
+        key: `si${i}`,
         id: item.id,
         aid: item.advertiser_id,
         name: item.solution_name,

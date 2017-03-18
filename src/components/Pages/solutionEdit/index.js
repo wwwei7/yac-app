@@ -64,7 +64,8 @@ let SolutionPage = React.createClass({
       ...data,
       name: data.solution_name,
       start: moment(data.start_date,'YYYY-MM-DD'),
-      end: data.end_date ? moment(data.end_date,'YYYY-MM-DD') : '',
+      end: data.end_date ? moment(data.end_date,'YYYY-MM-DD') : null,
+      price: data.price ? data.price : '',
       region: this.presetRegion(data.region_type, data.region_value),
       os: data.os ? data.os.split(',') : [],
       browser: data.browser ? data.browser.split(',') : []
