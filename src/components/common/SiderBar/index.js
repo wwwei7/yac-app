@@ -55,7 +55,7 @@ class Sider extends React.Component{
 
         <SubMenu key="solutionManagement" title={<span><Icon type="cloud-o" /><span>投放管理</span></span>}>
           <Menu.Item key="solutionNew"><Icon type="plus-square" />
-            <Link to={`/${this.aid}/solution`}>新增推广计划</Link>
+            <Link to={`/${this.aid}/solution/`}>新增推广计划</Link>
           </Menu.Item>
           <Menu.Item key="solutionList"><Icon type="edit" />
             <Link to={`/${this.aid}/solutionlist`}>现有推广计划管理</Link>

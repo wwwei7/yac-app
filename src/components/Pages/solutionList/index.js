@@ -21,7 +21,7 @@ class solutionListPage extends React.Component {
 
     this.columns = [{
       title: '名称',
-      render: record => <Link to={'/'+record.aid+'/solution/'+record.id+'/edit'}>{record.name}</Link>,
+      render: record => <Link to={'/'+record.aid+'/solution/'+record.id}>{record.name}</Link>,
     }, {
       title: '开始时间',
       dataIndex: 'start',

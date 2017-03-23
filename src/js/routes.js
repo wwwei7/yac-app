@@ -8,6 +8,7 @@ import reportDailyPage from '../components/Pages/reportDaily';
 import reportHourPage from '../components/Pages/reportHour';
 import reportMediaPage from '../components/Pages/reportMedia';
 import solutionListPage from '../components/Pages/solutionList';
+import solutionFormPage from '../components/Pages/solution';
 import solutionNewPage from '../components/Pages/solutionNew';
 import solutionEditPage from '../components/Pages/solutionEdit';
 import budgetPage from '../components/Pages/Budget';
@@ -34,9 +35,9 @@ class Routes extends Component{
                 <Route path="/:aid/reportdaily" component={reportDailyPage} onEnter={login}></Route>
                 <Route path="/:aid/reporthour" component={reportHourPage} onEnter={login}></Route>
                 <Route path="/:aid/reportmedia" component={reportMediaPage} onEnter={login}></Route>                
-                <Route path="/:aid/solution" component={solutionNewPage} onEnter={login}></Route>                               
+                <Route path="/:aid/solution/" component={solutionFormPage} editable={false} onEnter={login}></Route>                               
                 <Route path="/:aid/solutionlist" component={solutionListPage} onEnter={login}></Route>
-                <Route path="/:aid/solution/:sid/edit" component={solutionEditPage} onEnter={login}></Route>                
+                <Route path="/:aid/solution/:sid" component={solutionFormPage} editable={true} onEnter={login}></Route>                
                 <Route path="/budget" component={budgetPage} onEnter={login}></Route>
                 <Route path="/dmp" component={dmpPage} onEnter={login}></Route>
                 <Route path="/:aid/adinfo" component={adInfoPage} onEnter={login}></Route>    
