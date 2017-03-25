@@ -86,7 +86,7 @@ function cleanBin(done) {
  * @return {[type]} [description]
  */
 function cleanDeploy(done) {
-  del.sync(deploy.root);
+  del.sync(deploy.root, {force: true});
   done();
 }
 
@@ -281,6 +281,8 @@ gulp.task("build", gulp.series(
   gulp.parallel(copyAssets, copyVendor, html, style, webpackProduction), 
   cleanBin, 
   copyDist, 
+  cleanDeploy,
+  copyDistDeploy,
   function(done) {
     console.log('build success');
     done();
